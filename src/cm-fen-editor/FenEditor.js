@@ -7,7 +7,6 @@ import {Chessboard, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessb
 
 export const STATE = {
     move: "move",
-    duplicate: "duplicate",
     erase: "erase",
     wk: "wk", wq: "wq", wr: "wr", wb: "wb", wn: "wn", wp: "wp",
     bk: "bk", bq: "bq", br: "br", bb: "bb", bn: "bn", bp: "bp"
@@ -66,19 +65,9 @@ export class FenEditor {
                     } else if (event.type === INPUT_EVENT_TYPE.moveCanceled) {
                         this.chessboard.setPiece(this.moveStartEvent.square, null)
                     }
-                    return true
-                })
-                break
-            case STATE.duplicate:
-                this.chessboard.enableMoveInput((event) => {
-                    if (event.type === INPUT_EVENT_TYPE.moveStart) {
-                        this.moveStartEvent = event
-                        this.moveStartEvent.piece = this.chessboard.getPiece(event.square)
-                    } else if (event.type === INPUT_EVENT_TYPE.moveDone) {
-                        setTimeout(() => {
-                            this.chessboard.setPiece(this.moveStartEvent.square, this.moveStartEvent.piece)
-                        })
-                    }
+                    setTimeout(() => {
+                        this.elements.fenInputOutput.value = this.chessboard.getPosition()
+                    })
                     return true
                 })
                 break
@@ -86,6 +75,9 @@ export class FenEditor {
                 this.chessboard.enableMoveInput((event) => {
                     if (event.type === INPUT_EVENT_TYPE.moveStart) {
                         this.chessboard.setPiece(event.square, null)
+                        setTimeout(() => {
+                            this.elements.fenInputOutput.value = this.chessboard.getPosition()
+                        })
                     }
                     return false
                 })
