@@ -4,9 +4,10 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css"/>
+    <!-- <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css"/> -->
     <link rel="stylesheet" href="./node_modules/cm-chessboard/styles/cm-chessboard.css"/>
     <link rel="stylesheet" href="./assets/style/screen.css"/>
+    <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.css"/>
     <title>FEN Editor</title>
 </head>
 <body>
@@ -21,11 +22,61 @@
             </div>
         </form>
             <div class="row">
-                <div class="col">
+                <div class="col-8">
                     <div class="chessboard"></div>
                 </div>
-                <div class="col-auto">
-                    <div class="substitution-bench"></div>
+                <div class="col-4">
+                    <div class="buttons mb-3">
+                        <button data-state="move" class="btn btn-outline-success w-100 mb-3">
+                            <i class="fas fa-hand-pointer"></i> Move
+                        </button>
+                        <button data-state="duplicate" class="btn btn-outline-info w-100 mb-3">
+                            <i class="fas fa-clone"></i> Duplicate
+                        </button>
+                        <button data-state="erase" class="btn btn-outline-danger w-100 mb-3">
+                            <i class="fas fa-eraser"></i> Erase
+                        </button>
+                    </div>
+                    <div class="buttons-figures">
+                        <button data-state="bk" class="btn btn-light border-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-king"></i>
+                        </button>
+                        <button data-state="bq" class="btn btn-light border-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-queen"></i>
+                        </button>
+                        <button data-state="br" class="btn btn-light border-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-rook"></i>
+                        </button>
+                        <button data-state="bb" class="btn btn-light border-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-bishop"></i>
+                        </button>
+                        <button data-state="bn" class="btn btn-light border-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-knight"></i>
+                        </button>
+                        <button data-state="bp" class="btn btn-light border-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-pawn"></i>
+                        </button>
+                    </div>
+                    <div class="buttons-figures buttons-figures-light">
+                        <button data-state="wk" class="btn btn-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-king"></i>
+                        </button>
+                        <button data-state="wq" class="btn btn-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-queen"></i>
+                        </button>
+                        <button data-state="wr" class="btn btn-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-rook"></i>
+                        </button>
+                        <button data-state="wb" class="btn btn-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-bishop"></i>
+                        </button>
+                        <button data-state="wn" class="btn btn-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-knight"></i>
+                        </button>
+                        <button data-state="wp" class="btn btn-dark">
+                            <i class="fas fa-fw fa-2x fa-chess-pawn"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 

@@ -4,21 +4,34 @@
  * License: MIT, see file 'LICENSE'
  */
 import {Chessboard} from "../../lib/cm-chessboard/Chessboard.js"
-import {SubstitutionBench} from "./SubstitutionBench.js"
+
+export const STATE = {
+    move: "move",
+    duplicate: "duplicate",
+    erase: "erase",
+    wk: "wk", wq: "wq", wr: "wr", wb: "wb", wn: "wn", wp: "wp",
+    bk: "bk", bq: "bq", br: "br", bb: "bb", bn: "bn", bp: "bp"
+}
 
 export class FenEditor {
     constructor(element, chessboard, props = {}) {
         this.element = element
         this.chessboard = chessboard
-        this.props = {
-
-        }
+        this.props = {}
         Object.assign(this.props, props)
         this.elements = {
             fenInputOutput: this.element.querySelector("#fenInputOutput"),
             chessboard: this.element.querySelector(".chessboard"),
-            substitutionBench: this.element.querySelector(".substitution-bench")
+            buttons: this.element.querySelectorAll("button")
         }
+        this.state = undefined
+        this.setState(STATE.move)
+        for (const button of this.elements.buttons) {
+            button.addEventListener("click", () => {
+                this.setState(STATE[button.dataset.state])
+            })
+        }
+
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: "start",
             responsive: true,
@@ -28,10 +41,32 @@ export class FenEditor {
             style: {
                 aspectRatio: 0.94
             }
-        }, () => {
-            this.substitutionBench = new SubstitutionBench(this.elements.substitutionBench, {
-                sprite: this.chessboard.props.sprite
-            })
         })
+    }
+
+    setState(newState) {
+        console.log("setState", this.state, newState)
+        const previousState = this.state
+        this.state = newState
+        this.action(previousState, newState)
+        this.updateUserInterface()
+    }
+
+    action(fromState, toState) {
+        switch(toState) {
+            case STATE.move:
+                break
+        }
+    }
+
+    updateUserInterface() {
+        for (const button of this.elements.buttons) {
+            const state = button.getAttribute("data-state")
+            if(this.state === STATE[state]) {
+                button.classList.add("active")
+            } else {
+                button.classList.remove("active")
+            }
+        }
     }
 }
