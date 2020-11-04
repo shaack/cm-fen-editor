@@ -15,16 +15,22 @@ export const STATE = {
 export class FenEditor {
     constructor(element, props = {}) {
         this.element = element
-        this.props = {}
+        this.props = {
+            fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        }
         Object.assign(this.props, props)
         this.elements = {
             fenInputOutput: this.element.querySelector("#fenInputOutput"),
+            positionSelect: this.element.querySelector("select#positionSetUp"),
             chessboard: this.element.querySelector(".chessboard"),
-            buttons: this.element.querySelectorAll("button")
+            buttons: this.element.querySelectorAll("button"),
+            colorSelect: this.element.querySelector("select#nextMove"),
+            castlingCheckboxes: this.element.querySelectorAll("input[type='checkbox']"),
+            inputs: this.element.querySelectorAll(".conditions-inputs select, input")
         }
         this.state = undefined
         this.chessboard = new Chessboard(this.elements.chessboard, {
-            position: "start",
+            position: this.props.fen,
             responsive: true,
             moveInputMode: MOVE_INPUT_MODE.dragPiece,
             sprite: {
@@ -40,6 +46,23 @@ export class FenEditor {
                 this.setState(STATE[button.dataset.state])
             })
         }
+        for(const input of this.elements.inputs) {
+            input.addEventListener("change", () => {
+                this.updateFen()
+            })
+        }
+        this.elements.fenInputOutput.addEventListener("input", () => {
+            this.fenChanged()
+        })
+        this.elements.positionSelect.addEventListener("input", () => {
+            this.elements.fenInputOutput.value = this.elements.positionSelect.value
+            this.fenChanged()
+        })
+        setTimeout(() => {
+            this.elements.fenInputOutput.value = this.props.fen
+            this.fenChanged()
+        })
+
     }
 
     setState(newState) {
@@ -91,8 +114,32 @@ export class FenEditor {
 
     updateFen() {
         setTimeout(() => {
-            this.elements.fenInputOutput.value = this.chessboard.getPosition()
+            let fen = this.chessboard.getPosition() + " " + this.elements.colorSelect.value
+            let castling = ""
+            for (const castlingCheckbox of this.elements.castlingCheckboxes) {
+                if(castlingCheckbox.checked) {
+                    castling += castlingCheckbox.value
+                }
+            }
+            if(castling === "") {
+                castling = "-"
+            }
+            fen = fen + " " + castling + " - 0 1"
+            this.elements.fenInputOutput.value = fen
+            this.elements.positionSelect.value = fen
         })
+    }
+
+    fenChanged() {
+        const fen = this.elements.fenInputOutput.value
+        const fenParts = fen.split(" ")
+        this.chessboard.setPosition(fenParts[0], true)
+        this.elements.colorSelect.value = fenParts[1]
+        for (const castlingCheckbox of this.elements.castlingCheckboxes) {
+            castlingCheckbox.checked = fenParts[2].indexOf(castlingCheckbox.value) !== -1
+        }
+        this.elements.positionSelect.value = fen
+        console.log("fenChanged", fen)
     }
 
     updateButtons() {
