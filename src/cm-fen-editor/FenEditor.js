@@ -4,17 +4,20 @@
  * License: MIT, see file 'LICENSE'
  */
 import {Chessboard} from "../../lib/cm-chessboard/Chessboard.js"
+import {SubstitutionBench} from "./SubstitutionBench.js"
 
 export class FenEditor {
-    constructor(element, props = {}) {
+    constructor(element, chessboard, props = {}) {
         this.element = element
+        this.chessboard = chessboard
         this.props = {
 
         }
         Object.assign(this.props, props)
         this.elements = {
             fenInputOutput: this.element.querySelector("#fenInputOutput"),
-            chessboard: this.element.querySelector(".chessboard")
+            chessboard: this.element.querySelector(".chessboard"),
+            substitutionBench: this.element.querySelector(".substitution-bench")
         }
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: "start",
@@ -25,6 +28,10 @@ export class FenEditor {
             style: {
                 aspectRatio: 0.94
             }
+        }, () => {
+            this.substitutionBench = new SubstitutionBench(this.elements.substitutionBench, {
+                sprite: this.chessboard.props.sprite
+            })
         })
     }
 }
