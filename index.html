@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="./node_modules/cm-chessboard/styles/cm-chessboard.css"/>
+    <link rel="stylesheet" href="./assets/style/screen.css"/>
     <title>FEN Editor</title>
 </head>
 <body>
 <main>
     <div class="container">
         <h1>cm-fen-editor, a FEN editor for the web</h1>
-        <div id="editorContainer">
+        <div id="editorContainer" class="cm-fen-editor">
         <form>
             <div class="form-group">
                 <label for="fenInputOutput">FEN, input and output</label>
@@ -27,7 +28,7 @@
 <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <script type="module">
     import {FenEditor} from "./src/cm-fen-editor/FenEditor.js"
-    const editor = new FenEditor(document.getElementById("editorContainer"))
+    const editor = new FenEditor(document.getElementById("editorContainer"), {})
 </script>
 </body>
 </html>

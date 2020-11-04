@@ -18,8 +18,12 @@ export class FenEditor {
         }
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: "start",
+            responsive: true,
             sprite: {
                 url: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg", // pieces and markers are stored es svg in the sprite
+            },
+            style: {
+                aspectRatio: 0.94
             }
         })
     }
