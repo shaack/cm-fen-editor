@@ -15,18 +15,18 @@
     <div class="container">
         <h1>cm-fen-editor, a FEN editor for the web</h1>
         <div id="editorContainer" class="cm-fen-editor">
-        <form>
-            <div class="form-group">
-                <label for="fenInputOutput">FEN, Input and Output</label>
-                <input type="text" class="form-control" id="fenInputOutput" placeholder="FEN">
-            </div>
-        </form>
+            <form>
+                <div class="form-group">
+                    <label for="fenInputOutput">FEN, Input and Output</label>
+                    <input type="text" class="form-control" id="fenInputOutput">
+                </div>
+            </form>
             <div class="row">
-                <div class="col-8">
+                <div class="col-xl-7 col-md-7 mb-3">
                     <div class="chessboard"></div>
                 </div>
-                <div class="col-4">
-                    <div class="buttons mb-3">
+                <div class="col-xl-5 col-md-5">
+                    <div class="buttons mb-1">
                         <button data-state="move" class="btn btn-outline-success w-100 mb-2">
                             <i class="fas fa-hand-pointer"></i> Move
                         </button>
@@ -34,45 +34,79 @@
                             <i class="fas fa-eraser"></i> Erase
                         </button>
                     </div>
-                    <div class="buttons-figures">
-                        <button data-state="bk" class="btn btn-light border-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-king"></i>
-                        </button>
-                        <button data-state="bq" class="btn btn-light border-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-queen"></i>
-                        </button>
-                        <button data-state="br" class="btn btn-light border-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-rook"></i>
-                        </button>
-                        <button data-state="bb" class="btn btn-light border-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-bishop"></i>
-                        </button>
-                        <button data-state="bn" class="btn btn-light border-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-knight"></i>
-                        </button>
-                        <button data-state="bp" class="btn btn-light border-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-pawn"></i>
-                        </button>
+                    <div class="mb-2 clearfix">
+                        <div class="buttons-figures">
+                            <button data-state="bk" class="btn btn-light border-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-king"></i>
+                            </button>
+                            <button data-state="bq" class="btn btn-light border-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-queen"></i>
+                            </button>
+                            <button data-state="br" class="btn btn-light border-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-rook"></i>
+                            </button>
+                            <button data-state="bb" class="btn btn-light border-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-bishop"></i>
+                            </button>
+                            <button data-state="bn" class="btn btn-light border-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-knight"></i>
+                            </button>
+                            <button data-state="bp" class="btn btn-light border-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-pawn"></i>
+                            </button>
+                        </div>
+                        <div class="buttons-figures buttons-figures-light">
+                            <button data-state="wk" class="btn btn-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-king"></i>
+                            </button>
+                            <button data-state="wq" class="btn btn-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-queen"></i>
+                            </button>
+                            <button data-state="wr" class="btn btn-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-rook"></i>
+                            </button>
+                            <button data-state="wb" class="btn btn-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-bishop"></i>
+                            </button>
+                            <button data-state="wn" class="btn btn-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-knight"></i>
+                            </button>
+                            <button data-state="wp" class="btn btn-dark">
+                                <i class="fas fa-fw fa-2x fa-chess-pawn"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="buttons-figures buttons-figures-light">
-                        <button data-state="wk" class="btn btn-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-king"></i>
-                        </button>
-                        <button data-state="wq" class="btn btn-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-queen"></i>
-                        </button>
-                        <button data-state="wr" class="btn btn-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-rook"></i>
-                        </button>
-                        <button data-state="wb" class="btn btn-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-bishop"></i>
-                        </button>
-                        <button data-state="wn" class="btn btn-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-knight"></i>
-                        </button>
-                        <button data-state="wp" class="btn btn-dark">
-                            <i class="fas fa-fw fa-2x fa-chess-pawn"></i>
-                        </button>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="nextMove" class="sr-only">Next move</label>
+                                <select class="form-control" id="nextMove">
+                                    <option value="w">White to play</option>
+                                    <option value="b">Black to play</option>
+                                </select>
+                            </div>
+                            <p class="mb-2">Castling still allowed</p>
+                            <div class="clearfix">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input type="checkbox" class="checkbox-castle custom-control-input" id="castle-wk" value="K">
+                                    <label class="custom-control-label" for="castle-wk">White O-O</label>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input type="checkbox" class="checkbox-castle custom-control-input" id="castle-wq" value="Q">
+                                    <label class="custom-control-label" for="castle-wq">White O-O-O</label>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input type="checkbox" class="checkbox-castle custom-control-input" id="castle-bk" value="k">
+                                    <label class="custom-control-label" for="castle-bk">Black O-O</label>
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    <input type="checkbox" class="checkbox-castle custom-control-input" id="castle-bq" value="q">
+                                    <label class="custom-control-label" for="castle-bq">Black O-O-O</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -84,6 +118,7 @@
 <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <script type="module">
     import {FenEditor} from "./src/cm-fen-editor/FenEditor.js"
+
     const editor = new FenEditor(document.getElementById("editorContainer"), {})
 </script>
 </body>

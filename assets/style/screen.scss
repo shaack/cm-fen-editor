@@ -5,11 +5,13 @@
       width: 100%;
   }
   .buttons-figures {
-    clear: both;
+    @include media-breakpoint-down(sm) {
+      // clear: both;
+    }
     button {
       float: left;
-      margin-bottom: 0.3rem;
-      margin-right: 0.3rem;
+      margin-bottom: 0.4rem;
+      margin-right: 0.4rem;
       background-color: $gray-500;
     }
     &.buttons-figures-light {

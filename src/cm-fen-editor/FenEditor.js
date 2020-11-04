@@ -49,7 +49,8 @@ export class FenEditor {
             const previousState = this.state
             this.state = newState
             this.action(previousState, newState)
-            this.updateUserInterface()
+            this.updateButtons()
+            this.updateFen()
         }
     }
 
@@ -65,9 +66,7 @@ export class FenEditor {
                     } else if (event.type === INPUT_EVENT_TYPE.moveCanceled) {
                         this.chessboard.setPiece(this.moveStartEvent.square, null)
                     }
-                    setTimeout(() => {
-                        this.elements.fenInputOutput.value = this.chessboard.getPosition()
-                    })
+                    this.updateFen()
                     return true
                 })
                 break
@@ -75,25 +74,28 @@ export class FenEditor {
                 this.chessboard.enableMoveInput((event) => {
                     if (event.type === INPUT_EVENT_TYPE.moveStart) {
                         this.chessboard.setPiece(event.square, null)
-                        setTimeout(() => {
-                            this.elements.fenInputOutput.value = this.chessboard.getPosition()
-                        })
+                        this.updateFen()
                     }
                     return false
                 })
                 break
             default:
-                console.log("state default (pieces)")
-                // the figures
+                // the pieces buttons
                 this.chessboard.enableBoardClick((event) => {
-                    console.log(event)
                     this.chessboard.setPiece(event.square, this.state)
+                    this.updateFen()
                 })
                 break
         }
     }
 
-    updateUserInterface() {
+    updateFen() {
+        setTimeout(() => {
+            this.elements.fenInputOutput.value = this.chessboard.getPosition()
+        })
+    }
+
+    updateButtons() {
         for (const button of this.elements.buttons) {
             const state = button.getAttribute("data-state")
             if (this.state === STATE[state]) {

@@ -9175,17 +9175,15 @@ a.text-dark:hover, a.text-dark:focus {
 .cm-fen-editor .chessboard {
   width: 100%; }
 
-/* line 7, screen.scss */
-.cm-fen-editor .buttons-figures {
-  clear: both; }
-  /* line 9, screen.scss */
-  .cm-fen-editor .buttons-figures button {
-    float: left;
-    margin-bottom: 0.3rem;
-    margin-right: 0.3rem;
-    background-color: #adb5bd; }
-  /* line 15, screen.scss */
-  .cm-fen-editor .buttons-figures.buttons-figures-light {
-    background-color: red; }
+/* line 11, screen.scss */
+.cm-fen-editor .buttons-figures button {
+  float: left;
+  margin-bottom: 0.4rem;
+  margin-right: 0.4rem;
+  background-color: #adb5bd; }
+
+/* line 17, screen.scss */
+.cm-fen-editor .buttons-figures.buttons-figures-light {
+  background-color: red; }
 
 /*# sourceMappingURL=screen.css.map */
