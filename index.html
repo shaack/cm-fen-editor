@@ -24,7 +24,9 @@
                     <div class="col-auto pl-0">
                         <label for="positionSetUp" class="sr-only">Position setups</label>
                         <select class="form-control" id="positionSetUp">
-                            <option value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1">Starting Position</option>
+                            <option value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1">
+                                Starting Position
+                            </option>
                             <option value="4k3/8/8/8/8/8/8/4K3 w - - 0 1">Kings Only</option>
                             <option value="4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1">Kings and Pawns</option>
                             <option value="8/8/8/8/8/8/8/8 w - - 0 1">Empty Board</option>
@@ -125,14 +127,19 @@
                     </div>
                 </div>
             </div>
-
         </div>
+        <ul class="list-inline">
+            <li class="list-inline-item">
+                <a href="https://github.com/shaack/cm-fen-editor">GitHub Repository</a>
+            </li>
+        </ul>
     </div>
 </main>
 <script src="./node_modules/jquery/dist/jquery.min.js"></script>
 <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <script type="module">
     import {FenEditor} from "./src/cm-fen-editor/FenEditor.js"
+
     const editor = new FenEditor(document.getElementById("editorContainer"), {})
 </script>
 </body>
