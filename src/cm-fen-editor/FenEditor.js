@@ -3,7 +3,7 @@
  * Repository: https://github.com/shaack/cm-fen-editor
  * License: MIT, see file 'LICENSE'
  */
-import {Chessboard} from "../../lib/cm-chessboard/Chessboard.js"
+import {Chessboard, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessboard/Chessboard.js"
 
 export const STATE = {
     move: "move",
@@ -14,9 +14,8 @@ export const STATE = {
 }
 
 export class FenEditor {
-    constructor(element, chessboard, props = {}) {
+    constructor(element, props = {}) {
         this.element = element
-        this.chessboard = chessboard
         this.props = {}
         Object.assign(this.props, props)
         this.elements = {
@@ -25,16 +24,10 @@ export class FenEditor {
             buttons: this.element.querySelectorAll("button")
         }
         this.state = undefined
-        this.setState(STATE.move)
-        for (const button of this.elements.buttons) {
-            button.addEventListener("click", () => {
-                this.setState(STATE[button.dataset.state])
-            })
-        }
-
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: "start",
             responsive: true,
+            moveInputMode: MOVE_INPUT_MODE.dragPiece,
             sprite: {
                 url: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg", // pieces and markers are stored es svg in the sprite
             },
@@ -42,19 +35,68 @@ export class FenEditor {
                 aspectRatio: 0.94
             }
         })
+        this.setState(STATE.move)
+        for (const button of this.elements.buttons) {
+            button.addEventListener("click", () => {
+                this.setState(STATE[button.dataset.state])
+            })
+        }
     }
 
     setState(newState) {
         console.log("setState", this.state, newState)
-        const previousState = this.state
-        this.state = newState
-        this.action(previousState, newState)
-        this.updateUserInterface()
+        this.element.dataset.state = newState
+        if (this.state !== newState) {
+            const previousState = this.state
+            this.state = newState
+            this.action(previousState, newState)
+            this.updateUserInterface()
+        }
     }
 
     action(fromState, toState) {
-        switch(toState) {
+        this.chessboard.disableMoveInput()
+        this.chessboard.disableBoardClick()
+        switch (toState) {
             case STATE.move:
+                this.chessboard.enableMoveInput((event) => {
+                    if (event.type === INPUT_EVENT_TYPE.moveStart) {
+                        this.moveStartEvent = event
+                        this.moveStartEvent.piece = this.chessboard.getPiece(event.square)
+                    } else if (event.type === INPUT_EVENT_TYPE.moveCanceled) {
+                        this.chessboard.setPiece(this.moveStartEvent.square, null)
+                    }
+                    return true
+                })
+                break
+            case STATE.duplicate:
+                this.chessboard.enableMoveInput((event) => {
+                    if (event.type === INPUT_EVENT_TYPE.moveStart) {
+                        this.moveStartEvent = event
+                        this.moveStartEvent.piece = this.chessboard.getPiece(event.square)
+                    } else if (event.type === INPUT_EVENT_TYPE.moveDone) {
+                        setTimeout(() => {
+                            this.chessboard.setPiece(this.moveStartEvent.square, this.moveStartEvent.piece)
+                        })
+                    }
+                    return true
+                })
+                break
+            case STATE.erase:
+                this.chessboard.enableMoveInput((event) => {
+                    if (event.type === INPUT_EVENT_TYPE.moveStart) {
+                        this.chessboard.setPiece(event.square, null)
+                    }
+                    return false
+                })
+                break
+            default:
+                console.log("state default (pieces)")
+                // the figures
+                this.chessboard.enableBoardClick((event) => {
+                    console.log(event)
+                    this.chessboard.setPiece(event.square, this.state)
+                })
                 break
         }
     }
@@ -62,7 +104,7 @@ export class FenEditor {
     updateUserInterface() {
         for (const button of this.elements.buttons) {
             const state = button.getAttribute("data-state")
-            if(this.state === STATE[state]) {
+            if (this.state === STATE[state]) {
                 button.classList.add("active")
             } else {
                 button.classList.remove("active")
