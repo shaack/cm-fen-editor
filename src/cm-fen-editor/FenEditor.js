@@ -16,7 +16,8 @@ export class FenEditor {
     constructor(element, props = {}) {
         this.element = element
         this.props = {
-            fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+            fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            spriteUrl: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg"
         }
         Object.assign(this.props, props)
         this.elements = {
@@ -34,7 +35,7 @@ export class FenEditor {
             responsive: true,
             moveInputMode: MOVE_INPUT_MODE.dragPiece,
             sprite: {
-                url: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg", // pieces and markers are stored es svg in the sprite
+                url: this.props.spriteUrl,
             },
             style: {
                 aspectRatio: 0.94
