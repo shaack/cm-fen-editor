@@ -4,6 +4,7 @@
  * License: MIT, see file 'LICENSE'
  */
 import {Chessboard, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessboard/Chessboard.js"
+import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
 
 export const STATE = {
     move: "move",
@@ -67,7 +68,7 @@ export class FenEditor {
     }
 
     setState(newState) {
-        console.log("setState", this.state, newState)
+        // console.log("setState", this.state, newState)
         this.element.dataset.state = newState
         if (this.state !== newState) {
             const previousState = this.state
@@ -87,7 +88,7 @@ export class FenEditor {
                     if (event.type === INPUT_EVENT_TYPE.moveStart) {
                         this.moveStartEvent = event
                         this.moveStartEvent.piece = this.chessboard.getPiece(event.square)
-                    } else if (event.type === INPUT_EVENT_TYPE.moveCanceled) {
+                    } else if (event.type === INPUT_EVENT_TYPE.moveCanceled && event.reason === MOVE_CANCELED_REASON.movedOutOfBoard) {
                         this.chessboard.setPiece(this.moveStartEvent.square, null)
                     }
                     this.updateFen()
@@ -140,7 +141,6 @@ export class FenEditor {
             castlingCheckbox.checked = fenParts[2].indexOf(castlingCheckbox.value) !== -1
         }
         this.elements.positionSelect.value = fen
-        console.log("fenChanged", fen)
     }
 
     updateButtons() {
