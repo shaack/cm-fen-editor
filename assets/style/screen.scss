@@ -12,13 +12,13 @@
       float: left;
       margin-bottom: 0.4rem;
       margin-right: 0.4rem;
-      background-color: $gray-500;
+      background-color: lighten($gray-500, 5%);
       padding: 0.35rem 0.8rem;
     }
     &.buttons-figures {
       button {
         &:active, &.active {
-          background-color: $info;
+          background-color: darken($gray-500, 15%);
         }
       }
     }

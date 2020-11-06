@@ -9180,11 +9180,11 @@ a.text-dark:hover, a.text-dark:focus {
   float: left;
   margin-bottom: 0.4rem;
   margin-right: 0.4rem;
-  background-color: #adb5bd;
+  background-color: #bbc2c8;
   padding: 0.35rem 0.8rem; }
 
 /* line 20, screen.scss */
 .cm-fen-editor .buttons-figures.buttons-figures button:active, .cm-fen-editor .buttons-figures.buttons-figures button.active {
-  background-color: #17a2b8; }
+  background-color: #838f9b; }
 
 /*# sourceMappingURL=screen.css.map */
