@@ -9182,8 +9182,12 @@ a.text-dark:hover, a.text-dark:focus {
   margin-right: 0.4rem;
   background-color: #adb5bd; }
 
-/* line 17, screen.scss */
-.cm-fen-editor .buttons-figures.buttons-figures-light {
-  background-color: red; }
+/* line 19, screen.scss */
+.cm-fen-editor .buttons-figures.buttons-figures-dark button:active, .cm-fen-editor .buttons-figures.buttons-figures-dark button.active {
+  background-color: #ced4da; }
+
+/* line 26, screen.scss */
+.cm-fen-editor .buttons-figures.buttons-figures-light button:active, .cm-fen-editor .buttons-figures.buttons-figures-light button.active {
+  background-color: #6c757d; }
 
 /*# sourceMappingURL=screen.css.map */

@@ -25,7 +25,7 @@ export class FenEditor {
             fenInputOutput: this.element.querySelector("#fenInputOutput"),
             positionSelect: this.element.querySelector("select#positionSetUp"),
             chessboard: this.element.querySelector(".chessboard"),
-            buttons: this.element.querySelectorAll("button"),
+            stateButtons: this.element.querySelectorAll("button[data-state]"),
             colorSelect: this.element.querySelector("select#nextMove"),
             castlingCheckboxes: this.element.querySelectorAll("input[type='checkbox']"),
             inputs: this.element.querySelectorAll(".conditions-inputs select, input")
@@ -43,7 +43,7 @@ export class FenEditor {
             }
         })
         this.setState(STATE.move)
-        for (const button of this.elements.buttons) {
+        for (const button of this.elements.stateButtons) {
             button.addEventListener("click", () => {
                 this.setState(STATE[button.dataset.state])
             })
@@ -144,7 +144,7 @@ export class FenEditor {
     }
 
     updateButtons() {
-        for (const button of this.elements.buttons) {
+        for (const button of this.elements.stateButtons) {
             const state = button.getAttribute("data-state")
             if (this.state === STATE[state]) {
                 button.classList.add("active")
