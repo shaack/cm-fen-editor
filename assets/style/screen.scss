@@ -14,17 +14,10 @@
       margin-right: 0.4rem;
       background-color: $gray-500;
     }
-    &.buttons-figures-dark {
+    &.buttons-figures {
       button {
         &:active, &.active {
-          background-color: $gray-400;
-        }
-      }
-    }
-    &.buttons-figures-light {
-      button {
-        &:active, &.active {
-          background-color: $gray-600;
+          background-color: $info;
         }
       }
     }
