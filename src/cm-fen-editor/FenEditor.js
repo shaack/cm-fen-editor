@@ -62,9 +62,9 @@ export class FenEditor {
             this.inputChanged()
         })
         setTimeout(() => {
-            if(window.location.hash) {
+            if (window.location.hash) {
                 this.elements.fenInputOutput.value =
-                    window.location.hash.substr(1).replace(/_/g," ")
+                    window.location.hash.substr(1).replace(/_/g, " ")
             } else {
                 this.elements.fenInputOutput.value = this.props.fen
             }
@@ -131,7 +131,7 @@ export class FenEditor {
                 castling = "-"
             }
             fen = fen + " " + castling + " - 0 1"
-            if(fen !== this.elements.fenInputOutput.value) {
+            if (fen !== this.elements.fenInputOutput.value) {
                 this.elements.fenInputOutput.value = fen
                 this.elements.positionSelect.value = fen
                 this.onChange(fen)
@@ -163,13 +163,15 @@ export class FenEditor {
     }
 
     onChange(fen) {
-        if(fen !== this.props.fen) {
-            window.location.hash = fen.replace(/ /g,"_")
+        if (fen !== this.props.fen) {
+            window.location.hash = fen.replace(/ /g, "_")
         } else {
-            history.pushState("", document.title, window.location.pathname);
+            history.pushState("", document.title, window.location.pathname)
         }
-        if(this.props.onChange) {
-            this.props.onChange(fen)
+        if (this.props.onChange) {
+            setTimeout(function () {
+                this.props.onChange(fen)
+            })
         }
     }
 }
