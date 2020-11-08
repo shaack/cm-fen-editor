@@ -62,7 +62,12 @@ export class FenEditor {
             this.inputChanged()
         })
         setTimeout(() => {
-            this.elements.fenInputOutput.value = this.props.fen
+            if(window.location.hash) {
+                this.elements.fenInputOutput.value =
+                    window.location.hash.substr(1).replace(/_/g," ")
+            } else {
+                this.elements.fenInputOutput.value = this.props.fen
+            }
             this.inputChanged()
         })
 
@@ -129,9 +134,7 @@ export class FenEditor {
             if(fen !== this.elements.fenInputOutput.value) {
                 this.elements.fenInputOutput.value = fen
                 this.elements.positionSelect.value = fen
-                if(this.props.onChange) {
-                    this.props.onChange(fen)
-                }
+                this.onChange(fen)
             }
         })
     }
@@ -139,15 +142,13 @@ export class FenEditor {
     inputChanged() {
         const fen = this.elements.fenInputOutput.value
         const fenParts = fen.split(" ")
-        this.chessboard.setPosition(fenParts[0], true)
+        this.chessboard.setPosition(fenParts[0], false)
         this.elements.colorSelect.value = fenParts[1]
         for (const castlingCheckbox of this.elements.castlingCheckboxes) {
             castlingCheckbox.checked = fenParts[2].indexOf(castlingCheckbox.value) !== -1
         }
         this.elements.positionSelect.value = fen
-        if(this.props.onChange) {
-            this.props.onChange(fen)
-        }
+        this.onChange(fen)
     }
 
     updateButtons() {
@@ -158,6 +159,17 @@ export class FenEditor {
             } else {
                 button.classList.remove("active")
             }
+        }
+    }
+
+    onChange(fen) {
+        if(fen !== this.props.fen) {
+            window.location.hash = fen.replace(/ /g,"_")
+        } else {
+            history.pushState("", document.title, window.location.pathname);
+        }
+        if(this.props.onChange) {
+            this.props.onChange(fen)
         }
     }
 }
