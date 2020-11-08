@@ -13,6 +13,7 @@ export const STATE = {
     bk: "bk", bq: "bq", br: "br", bb: "bb", bn: "bn", bp: "bp"
 }
 
+// TODO separate FenEditorState and FenEditorView in different classes
 export class FenEditor {
     constructor(element, props = {}) {
         this.element = element
@@ -31,7 +32,6 @@ export class FenEditor {
             castlingCheckboxes: this.element.querySelectorAll("input[type='checkbox']"),
             inputs: this.element.querySelectorAll(".conditions-inputs select, input")
         }
-        this.state = undefined
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: this.props.fen,
             responsive: true,
@@ -43,6 +43,7 @@ export class FenEditor {
                 aspectRatio: 0.94
             }
         })
+        this.state = undefined
         this.setState(STATE.move)
         for (const button of this.elements.stateButtons) {
             button.addEventListener("click", () => {
@@ -64,7 +65,7 @@ export class FenEditor {
         setTimeout(() => {
             if (window.location.hash) {
                 this.elements.fenInputOutput.value =
-                    window.location.hash.substr(1).replace(/_/g, " ")
+                    decodeURIComponent(window.location.hash.substr(1))
             } else {
                 this.elements.fenInputOutput.value = this.props.fen
             }
@@ -143,9 +144,13 @@ export class FenEditor {
         const fen = this.elements.fenInputOutput.value
         const fenParts = fen.split(" ")
         this.chessboard.setPosition(fenParts[0], false)
-        this.elements.colorSelect.value = fenParts[1]
-        for (const castlingCheckbox of this.elements.castlingCheckboxes) {
-            castlingCheckbox.checked = fenParts[2].indexOf(castlingCheckbox.value) !== -1
+        if(fenParts[1]) {
+            this.elements.colorSelect.value = fenParts[1]
+        }
+        if(fenParts[2]) {
+            for (const castlingCheckbox of this.elements.castlingCheckboxes) {
+                castlingCheckbox.checked = fenParts[2].indexOf(castlingCheckbox.value) !== -1
+            }
         }
         this.elements.positionSelect.value = fen
         this.onChange(fen)
@@ -164,14 +169,17 @@ export class FenEditor {
 
     onChange(fen) {
         if (fen !== this.props.fen) {
-            window.location.hash = fen.replace(/ /g, "_")
+            history.replaceState("", document.title, window.location.pathname + "#" +  fen)
         } else {
-            history.pushState("", document.title, window.location.pathname)
+            history.replaceState("", document.title, window.location.pathname)
         }
+        this.fen = fen
         if (this.props.onChange) {
-            setTimeout(function () {
-                this.props.onChange(fen)
-            })
+            this.props.onChange(fen)
         }
+    }
+
+    fen() {
+        return this.elements.fenInputOutput.value
     }
 }
