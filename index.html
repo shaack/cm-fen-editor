@@ -140,7 +140,11 @@
 <script type="module">
     import {FenEditor} from "./src/cm-fen-editor/FenEditor.js"
 
-    const editor = new FenEditor(document.getElementById("editorContainer"), {})
+    const editor = new FenEditor(document.getElementById("editorContainer"), {
+        onChange: function(fen) {
+            console.log("fen changed", fen)
+        }
+    })
 </script>
 </body>
 </html>

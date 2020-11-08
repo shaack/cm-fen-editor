@@ -18,7 +18,8 @@ export class FenEditor {
         this.element = element
         this.props = {
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-            spriteUrl: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg"
+            spriteUrl: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg",
+            onChange: undefined
         }
         Object.assign(this.props, props)
         this.elements = {
@@ -48,34 +49,32 @@ export class FenEditor {
                 this.setState(STATE[button.dataset.state])
             })
         }
-        for(const input of this.elements.inputs) {
+        for (const input of this.elements.inputs) {
             input.addEventListener("change", () => {
                 this.updateFen()
             })
         }
         this.elements.fenInputOutput.addEventListener("input", () => {
-            this.fenChanged()
+            this.inputChanged()
         })
         this.elements.positionSelect.addEventListener("input", () => {
             this.elements.fenInputOutput.value = this.elements.positionSelect.value
-            this.fenChanged()
+            this.inputChanged()
         })
         setTimeout(() => {
             this.elements.fenInputOutput.value = this.props.fen
-            this.fenChanged()
+            this.inputChanged()
         })
 
     }
 
     setState(newState) {
-        // console.log("setState", this.state, newState)
         this.element.dataset.state = newState
         if (this.state !== newState) {
             const previousState = this.state
             this.state = newState
             this.action(previousState, newState)
             this.updateButtons()
-            this.updateFen()
         }
     }
 
@@ -119,20 +118,25 @@ export class FenEditor {
             let fen = this.chessboard.getPosition() + " " + this.elements.colorSelect.value
             let castling = ""
             for (const castlingCheckbox of this.elements.castlingCheckboxes) {
-                if(castlingCheckbox.checked) {
+                if (castlingCheckbox.checked) {
                     castling += castlingCheckbox.value
                 }
             }
-            if(castling === "") {
+            if (castling === "") {
                 castling = "-"
             }
             fen = fen + " " + castling + " - 0 1"
-            this.elements.fenInputOutput.value = fen
-            this.elements.positionSelect.value = fen
+            if(fen !== this.elements.fenInputOutput.value) {
+                this.elements.fenInputOutput.value = fen
+                this.elements.positionSelect.value = fen
+                if(this.props.onChange) {
+                    this.props.onChange(fen)
+                }
+            }
         })
     }
 
-    fenChanged() {
+    inputChanged() {
         const fen = this.elements.fenInputOutput.value
         const fenParts = fen.split(" ")
         this.chessboard.setPosition(fenParts[0], true)
@@ -141,6 +145,9 @@ export class FenEditor {
             castlingCheckbox.checked = fenParts[2].indexOf(castlingCheckbox.value) !== -1
         }
         this.elements.positionSelect.value = fen
+        if(this.props.onChange) {
+            this.props.onChange(fen)
+        }
     }
 
     updateButtons() {
