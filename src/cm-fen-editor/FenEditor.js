@@ -59,8 +59,10 @@ export class FenEditor {
             this.inputChanged()
         })
         this.elements.positionSelect.addEventListener("input", () => {
-            this.elements.fenInputOutput.value = this.elements.positionSelect.value
-            this.inputChanged()
+            if(this.elements.positionSelect.value) {
+                this.elements.fenInputOutput.value = this.elements.positionSelect.value
+                this.inputChanged()
+            }
         })
         setTimeout(() => {
             if (window.location.hash) {
