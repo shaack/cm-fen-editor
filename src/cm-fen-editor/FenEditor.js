@@ -5,6 +5,7 @@
  */
 import {Chessboard, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
+import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
 
 export const STATE = {
     move: "move",
@@ -20,7 +21,8 @@ export class FenEditor {
         this.props = {
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             spriteUrl: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg",
-            onChange: undefined
+            onChange: undefined,
+            cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }
         Object.assign(this.props, props)
         this.elements = {
@@ -59,15 +61,21 @@ export class FenEditor {
             this.inputChanged()
         })
         this.elements.positionSelect.addEventListener("input", () => {
-            if(this.elements.positionSelect.value) {
+            if (this.elements.positionSelect.value) {
                 this.elements.fenInputOutput.value = this.elements.positionSelect.value
                 this.inputChanged()
             }
         })
         setTimeout(() => {
             if (window.location.hash) {
-                this.elements.fenInputOutput.value =
-                    decodeURIComponent(window.location.hash.substr(1))
+                this.elements.fenInputOutput.value = decodeURIComponent(window.location.hash.substr(1))
+            } else if (this.props.cookieName) {
+                const fromCookie = Cookie.read(this.props.cookieName)
+                if (fromCookie) {
+                    this.elements.fenInputOutput.value = fromCookie
+                } else {
+                    this.elements.fenInputOutput.value = this.props.fen
+                }
             } else {
                 this.elements.fenInputOutput.value = this.props.fen
             }
@@ -146,10 +154,10 @@ export class FenEditor {
         const fen = this.elements.fenInputOutput.value
         const fenParts = fen.split(" ")
         this.chessboard.setPosition(fenParts[0], false)
-        if(fenParts[1]) {
+        if (fenParts[1]) {
             this.elements.colorSelect.value = fenParts[1]
         }
-        if(fenParts[2]) {
+        if (fenParts[2]) {
             for (const castlingCheckbox of this.elements.castlingCheckboxes) {
                 castlingCheckbox.checked = fenParts[2].indexOf(castlingCheckbox.value) !== -1
             }
@@ -171,11 +179,13 @@ export class FenEditor {
 
     onChange(fen) {
         if (fen !== this.props.fen) {
-            history.replaceState("", document.title, window.location.pathname + "#" +  fen)
+            history.replaceState("", document.title, window.location.pathname + "#" + fen)
         } else {
             history.replaceState("", document.title, window.location.pathname)
         }
-        this.fen = fen
+        if (this.props.cookieName) {
+            Cookie.write(this.props.cookieName, fen)
+        }
         if (this.props.onChange) {
             this.props.onChange(fen)
         }

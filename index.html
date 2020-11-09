@@ -143,7 +143,7 @@
 
     const editor = new FenEditor(document.getElementById("editorContainer"), {
         onChange: function(fen) {
-            console.log("fen changed", fen)
+            console.log("onChange callback", fen)
         }
     })
 </script>

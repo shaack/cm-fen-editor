@@ -27,7 +27,7 @@
     "@fortawesome/fontawesome-free": "^5.15.1",
     "bootstrap": "^4.5.3",
     "cm-chessboard": "^3.3.6",
-    "cm-web-modules": "^1.3.5",
+    "cm-web-modules": "^1.4.0",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1"
   }
