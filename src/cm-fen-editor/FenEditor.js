@@ -3,7 +3,7 @@
  * Repository: https://github.com/shaack/cm-fen-editor
  * License: MIT, see file 'LICENSE'
  */
-import {Chessboard, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessboard/Chessboard.js"
+import {Chessboard, PIECE, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
 import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
 
@@ -64,6 +64,7 @@ export class FenEditor {
             if (this.elements.positionSelect.value) {
                 this.elements.fenInputOutput.value = this.elements.positionSelect.value
                 this.inputChanged()
+                this.updateFen()
             }
         })
         setTimeout(() => {
@@ -133,6 +134,48 @@ export class FenEditor {
         setTimeout(() => {
             let fen = this.chessboard.getPosition() + " " + this.elements.colorSelect.value
             let castling = ""
+            // check for castling possible
+            let castleWk = true
+            let castleWq = true
+            let castleBk = true
+            let castleBq = true
+            if (this.chessboard.getPiece("e1") !== PIECE.wk) {
+                castleWk = false
+                castleWq = false
+            }
+            if (this.chessboard.getPiece("h1") !== PIECE.wr) {
+                castleWk = false
+            }
+            if (this.chessboard.getPiece("a1") !== PIECE.wr) {
+                castleWq = false
+            }
+            if (this.chessboard.getPiece("e8") !== PIECE.bk) {
+                castleBk = false
+                castleBq = false
+            }
+            if (this.chessboard.getPiece("h8") !== PIECE.br) {
+                castleBk = false
+            }
+            if (this.chessboard.getPiece("a8") !== PIECE.br) {
+                castleBq = false
+            }
+            $("#castle-wk").prop("disabled", !castleWk)
+            if(!castleWk) {
+                $("#castle-wk").prop("checked", castleWk)
+            }
+            $("#castle-wq").prop("disabled", !castleWq)
+            if(!castleWq) {
+                $("#castle-wq").prop("checked", castleWq)
+            }
+            $("#castle-bk").prop("disabled", !castleBk)
+            if(!castleBk) {
+                $("#castle-bk").prop("checked", castleBk)
+            }
+            $("#castle-bq").prop("disabled", !castleBq)
+            if(!castleBq) {
+                $("#castle-bq").prop("checked", castleBq)
+            }
+
             for (const castlingCheckbox of this.elements.castlingCheckboxes) {
                 if (castlingCheckbox.checked) {
                     castling += castlingCheckbox.value
