@@ -6,6 +6,7 @@
 import {Chessboard, PIECE, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
 import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
+import {Chess} from "../../lib/cm-chess/Chess.js"
 
 export const STATE = {
     move: "move",
@@ -24,6 +25,7 @@ export class FenEditor {
             onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }
+        this.valid = true
         Object.assign(this.props, props)
         this.elements = {
             fenInputOutput: this.element.querySelector("#fenInputOutput"),
@@ -159,23 +161,26 @@ export class FenEditor {
             if (this.chessboard.getPiece("a8") !== PIECE.br) {
                 castleBq = false
             }
-            $("#castle-wk").prop("disabled", !castleWk)
+            const $cwk = $("#castle-wk")
+            const $cwq = $("#castle-wq")
+            const $cbk = $("#castle-bk")
+            const $cbq = $("#castle-bq")
+            $cwk.prop("disabled", !castleWk)
             if(!castleWk) {
-                $("#castle-wk").prop("checked", castleWk)
+                $cwk.prop("checked", castleWk)
             }
-            $("#castle-wq").prop("disabled", !castleWq)
+            $cwq.prop("disabled", !castleWq)
             if(!castleWq) {
-                $("#castle-wq").prop("checked", castleWq)
+                $cwq.prop("checked", castleWq)
             }
-            $("#castle-bk").prop("disabled", !castleBk)
+            $cbk.prop("disabled", !castleBk)
             if(!castleBk) {
-                $("#castle-bk").prop("checked", castleBk)
+                $cbk.prop("checked", castleBk)
             }
-            $("#castle-bq").prop("disabled", !castleBq)
+            $cbq.prop("disabled", !castleBq)
             if(!castleBq) {
-                $("#castle-bq").prop("checked", castleBq)
+                $cbq.prop("checked", castleBq)
             }
-
             for (const castlingCheckbox of this.elements.castlingCheckboxes) {
                 if (castlingCheckbox.checked) {
                     castling += castlingCheckbox.value
@@ -195,6 +200,17 @@ export class FenEditor {
 
     inputChanged() {
         const fen = this.elements.fenInputOutput.value
+        // validate
+        try {
+            new Chess(fen)
+            this.elements.fenInputOutput.classList.remove("is-invalid")
+            this.elements.fenInputOutput.classList.remove("text-danger")
+            this.valid = true
+        } catch(e) {
+            this.elements.fenInputOutput.classList.add("is-invalid")
+            this.elements.fenInputOutput.classList.add("text-danger")
+            this.valid = false
+        }
         const fenParts = fen.split(" ")
         this.chessboard.setPosition(fenParts[0], false)
         if (fenParts[1]) {
@@ -230,7 +246,7 @@ export class FenEditor {
             Cookie.write(this.props.cookieName, fen)
         }
         if (this.props.onChange) {
-            this.props.onChange(fen)
+            this.props.onChange(fen, this.valid)
         }
     }
 

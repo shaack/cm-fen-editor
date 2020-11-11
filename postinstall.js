@@ -8,3 +8,5 @@ const manager = new LibraryManager(__dirname)
 
 manager.addProject("cm-web-modules")
 manager.addProject("cm-chessboard")
+manager.addProject("cm-chess")
+manager.addProject("cm-pgn")
