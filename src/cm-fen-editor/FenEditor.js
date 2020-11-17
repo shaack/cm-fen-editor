@@ -1,6 +1,7 @@
 import {Component} from "../../lib/cm-web-modules/app/Component.js"
 import {Chessboard, COLOR, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
+import {Chess} from "../../lib/cm-chess/Chess.js"
 
 export const EDIT_MODE = {
     move: "move",
@@ -20,6 +21,7 @@ export class FenEditor extends Component {
         super(props, {
             mode: EDIT_MODE.move,
             fen: props.fen,
+            fenValid: true,
             colorToPlay: COLOR.white,
             allowedCastling: ["k", "K", "q", "Q"]
         }, {
@@ -47,6 +49,21 @@ export class FenEditor extends Component {
                         this.chessboard.setPosition(value)
                     })
                     return value
+                },
+                parse: (value) => {
+                    // console.log(value)
+                    try {
+                        new Chess(value)
+                        this.elements.fenInputOutput.classList.remove("is-invalid")
+                        this.elements.fenInputOutput.classList.remove("text-danger")
+                        this.state.fenValid = true
+                        return value
+                    } catch (e) {
+                        this.elements.fenInputOutput.classList.add("is-invalid")
+                        this.elements.fenInputOutput.classList.add("text-danger")
+                        this.state.fenValid = false
+                        return value
+                    }
                 }
             },
             colorToPlay: {
@@ -56,7 +73,15 @@ export class FenEditor extends Component {
                     return value
                 }
             },
-            allowedCastling: "input[name='castling']"
+            allowedCastling: {
+                dom: "input[name='castling']",
+                callback: (value) => {
+                    setTimeout(() => {
+                        this.updateFen()
+                        return value
+                    })
+                }
+            }
         }, {
             switchMode: (event) => {
                 this.state.mode = event.target.dataset.mode
@@ -64,6 +89,7 @@ export class FenEditor extends Component {
         }, context)
         this.elements = {
             chessboard: context.querySelector(".chessboard"),
+            fenInputOutput: context.querySelector("#fenInputOutput"),
             modeButtons: context.querySelectorAll("button[data-mode]")
         }
         this.chessboard = new Chessboard(this.elements.chessboard, {
@@ -114,9 +140,18 @@ export class FenEditor extends Component {
     }
 
     updateFen() {
-        setTimeout(() => {
-            this.state.fen = this.chessboard.getPosition() + " " + this.state.colorToPlay + " KQkq - 0 1"
-            console.log("updateFen", this.state.fen)
+        clearTimeout(this.debounceFen)
+        this.debounceFen = setTimeout(() => {
+            if (this.state.fenValid) {
+                // console.log(this.state.allowedCastling.length)
+                const newFen = this.chessboard.getPosition() + " " +
+                    this.state.colorToPlay + " " +
+                    (this.state.allowedCastling.length > 0 ? this.state.allowedCastling.join("") : "-") + " - 0 1"
+                if (newFen !== this.state.fen) {
+                    this.state.fen = newFen
+                    console.log("updateFen", this.state.fen)
+                }
+            }
         })
     }
 }
