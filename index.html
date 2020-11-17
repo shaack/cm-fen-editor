@@ -19,11 +19,11 @@
                 <div class="form-group row">
                     <label for="fenInputOutput" class="col-auto col-form-label d-none d-md-block">FEN</label>
                     <div class="col pl-md-0">
-                        <input type="text" class="form-control" id="fenInputOutput">
+                        <input type="text" class="form-control fen-input-output" id="fenInputOutput">
                     </div>
                     <div class="col-auto pl-0">
                         <label for="positionSetUp" class="sr-only">Position setups</label>
-                        <select class="form-control" id="positionSetUp">
+                        <select class="form-control fen-input-output" id="positionSetUp">
                             <option value=""></option>
                             <option value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1">
                                 Starting Position
@@ -93,8 +93,8 @@
                     <div class="card conditions-inputs bg-light">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="nextMove" class="sr-only">Next move</label>
-                                <select class="form-control" id="nextMove">
+                                <label for="colorToPlay" class="sr-only">Color to play</label>
+                                <select class="form-control" id="colorToPlay">
                                     <option value="w">White to play</option>
                                     <option value="b">Black to play</option>
                                 </select>
@@ -102,24 +102,24 @@
                             <p class="mb-2">Allowed castling</p>
                             <div class="clearfix">
                                 <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" class="checkbox-castle custom-control-input" id="castle-wk"
+                                    <input type="checkbox" name="castling" class="checkbox-castle custom-control-input" id="castle-wk"
                                            value="K">
                                     <label class="custom-control-label" for="castle-wk">White O-O</label>
                                 </div>
                                 <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" class="checkbox-castle custom-control-input" id="castle-wq"
+                                    <input type="checkbox" name="castling" class="checkbox-castle custom-control-input" id="castle-wq"
                                            value="Q">
                                     <label class="custom-control-label" for="castle-wq">White O-O-O</label>
                                 </div>
                             </div>
                             <div class="clearfix">
                                 <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" class="checkbox-castle custom-control-input" id="castle-bk"
+                                    <input type="checkbox" name="castling" class="checkbox-castle custom-control-input" id="castle-bk"
                                            value="k">
                                     <label class="custom-control-label" for="castle-bk">Black O-O</label>
                                 </div>
                                 <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" class="checkbox-castle custom-control-input" id="castle-bq"
+                                    <input type="checkbox" name="castling" class="checkbox-castle custom-control-input" id="castle-bq"
                                            value="q">
                                     <label class="custom-control-label" for="castle-bq">Black O-O-O</label>
                                 </div>
