@@ -43,6 +43,7 @@ export class FenEditor extends Component {
                     setTimeout(() => {
                         const fenParts = value.split(" ")
                         this.state.colorToPlay = fenParts[1]
+                        this.state.allowedCastling = fenParts[2].split("")
                         this.chessboard.setPosition(value)
                     })
                     return value
