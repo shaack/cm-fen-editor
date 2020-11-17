@@ -4,6 +4,11 @@
   .chessboard {
       width: 100%;
   }
+  button {
+    i {
+      pointer-events: none;
+    }
+  }
   .buttons-figures {
     @include media-breakpoint-down(sm) {
       // clear: both;
