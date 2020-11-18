@@ -1,5 +1,5 @@
 import {Component} from "../../lib/cm-web-modules/app/Component.js"
-import {Chessboard, COLOR, INPUT_EVENT_TYPE, MOVE_INPUT_MODE} from "../../lib/cm-chessboard/Chessboard.js"
+import {Chessboard, COLOR, INPUT_EVENT_TYPE, MOVE_INPUT_MODE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
 import {Chess} from "../../lib/cm-chess/Chess.js"
 
@@ -23,7 +23,7 @@ export class FenEditor extends Component {
             fen: props.fen,
             fenValid: true,
             colorToPlay: COLOR.white,
-            allowedCastling: ["k", "K", "q", "Q"]
+            castling: ["k", "K", "q", "Q"]
         }, {
             mode: {
                 callback: (value) => {
@@ -45,8 +45,12 @@ export class FenEditor extends Component {
                     setTimeout(() => {
                         const fenParts = value.split(" ")
                         this.state.colorToPlay = fenParts[1]
-                        this.state.allowedCastling = fenParts[2].split("")
-                        this.chessboard.setPosition(value)
+                        this.state.castling = fenParts[2].split("")
+                        this.chessboard.setPosition(value).then(() => {
+                            this.checkAllowedCastlings()
+                        })
+                        // check for allowed castlings
+
                     })
                     return value
                 },
@@ -73,7 +77,7 @@ export class FenEditor extends Component {
                     return value
                 }
             },
-            allowedCastling: {
+            castling: {
                 dom: "input[name='castling']",
                 callback: (value) => {
                     setTimeout(() => {
@@ -139,6 +143,58 @@ export class FenEditor extends Component {
         }
     }
 
+    checkAllowedCastlings() {
+        let castleWk = true
+        let castleWq = true
+        let castleBk = true
+        let castleBq = true
+        if (this.chessboard.getPiece("e1") !== PIECE.wk) {
+            castleWk = false
+            castleWq = false
+        }
+        if (this.chessboard.getPiece("h1") !== PIECE.wr) {
+            castleWk = false
+        }
+        if (this.chessboard.getPiece("a1") !== PIECE.wr) {
+            castleWq = false
+        }
+        if (this.chessboard.getPiece("e8") !== PIECE.bk) {
+            castleBk = false
+            castleBq = false
+        }
+        if (this.chessboard.getPiece("h8") !== PIECE.br) {
+            castleBk = false
+        }
+        if (this.chessboard.getPiece("a8") !== PIECE.br) {
+            castleBq = false
+        }
+        if (!castleWk) {
+            const index = this.state.castling.indexOf("K")
+            console.log(index, this.state.castling)
+            if (index !== -1) {
+                this.state.castling.splice(index, 1)
+            }
+        }
+        if (!castleWq) {
+            const index = this.state.castling.indexOf("Q")
+            if (index !== -1) {
+                this.state.castling.splice(index, 1)
+            }
+        }
+        if (!castleBk) {
+            const index = this.state.castling.indexOf("k")
+            if (index !== -1) {
+                this.state.castling.splice(index, 1)
+            }
+        }
+        if (!castleBq) {
+            const index = this.state.castling.indexOf("q")
+            if (index !== -1) {
+                this.state.castling.splice(index, 1)
+            }
+        }
+    }
+
     updateFen() {
         clearTimeout(this.debounceFen)
         this.debounceFen = setTimeout(() => {
@@ -146,7 +202,7 @@ export class FenEditor extends Component {
                 // console.log(this.state.allowedCastling.length)
                 const newFen = this.chessboard.getPosition() + " " +
                     this.state.colorToPlay + " " +
-                    (this.state.allowedCastling.length > 0 ? this.state.allowedCastling.join("") : "-") + " - 0 1"
+                    (this.state.castling.length > 0 ? this.state.castling.join("") : "-") + " - 0 1"
                 if (newFen !== this.state.fen) {
                     this.state.fen = newFen
                     console.log("updateFen", this.state.fen)
