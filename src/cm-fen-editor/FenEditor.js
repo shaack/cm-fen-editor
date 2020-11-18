@@ -53,7 +53,7 @@ export class FenEditor extends Component {
                         const fenParts = value.split(" ")
                         this.state.colorToPlay = fenParts[1]
                         this.state.castling = fenParts[2].split("")
-                        this.chessboard.setPosition(value).then(() => {
+                        this.chessboard.setPosition(value, false).then(() => {
                             this.checkAllowedCastlings()
                         })
                         if (this.props.onChange) {
