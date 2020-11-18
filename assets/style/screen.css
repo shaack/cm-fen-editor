@@ -9171,15 +9171,11 @@ a.text-dark:hover, a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6; } }
 
-/* line 4, screen.scss */
-.cm-fen-editor .chessboard {
-  width: 100%; }
-
-/* line 8, screen.scss */
+/* line 5, screen.scss */
 .cm-fen-editor button i {
   pointer-events: none; }
 
-/* line 16, screen.scss */
+/* line 10, screen.scss */
 .cm-fen-editor .buttons-figures button {
   float: left;
   margin-bottom: 0.4rem;
@@ -9187,7 +9183,7 @@ a.text-dark:hover, a.text-dark:focus {
   background-color: #bbc2c8;
   padding: 0.35rem 0.8rem; }
 
-/* line 25, screen.scss */
+/* line 19, screen.scss */
 .cm-fen-editor .buttons-figures.buttons-figures button:active, .cm-fen-editor .buttons-figures.buttons-figures button.active {
   background-color: #838f9b; }
 

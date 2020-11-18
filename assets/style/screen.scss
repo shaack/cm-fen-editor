@@ -1,18 +1,12 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 .cm-fen-editor {
-  .chessboard {
-      width: 100%;
-  }
   button {
     i {
       pointer-events: none;
     }
   }
   .buttons-figures {
-    @include media-breakpoint-down(sm) {
-      // clear: both;
-    }
     button {
       float: left;
       margin-bottom: 0.4rem;
