@@ -143,8 +143,8 @@
     import {FenEditor} from "./src/cm-fen-editor/FenEditor.js"
 
     const editor = new FenEditor(document.getElementById("editorContainer"), {
-        onChange: function(fen) {
-            console.log("onChange callback", fen)
+        onChange: function(fen, valid) {
+            console.log("onChange callback", fen, valid)
         }
     })
 </script>

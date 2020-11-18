@@ -1,3 +1,9 @@
+/**
+ * Author and copyright: Stefan Haack (https://shaack.com)
+ * Repository: https://github.com/shaack/cm-fen-editor
+ * License: MIT, see file 'LICENSE'
+ */
+
 import {Component} from "../../lib/cm-web-modules/app/Component.js"
 import {Chessboard, COLOR, INPUT_EVENT_TYPE, MOVE_INPUT_MODE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
@@ -11,13 +17,12 @@ export const EDIT_MODE = {
     bk: "bk", bq: "bq", br: "br", bb: "bb", bn: "bn", bp: "bp"
 }
 
-// noinspection DuplicatedCode
 export class FenEditor extends Component {
     constructor(context, props) {
         props = Object.assign({
             fen: "8/8/8/8/8/8/8/8 w - - 0 1",
             spriteUrl: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg",
-            // onChange: undefined,
+            onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }, props)
         super(props, {
@@ -51,8 +56,15 @@ export class FenEditor extends Component {
                         this.chessboard.setPosition(value).then(() => {
                             this.checkAllowedCastlings()
                         })
-                        // check for allowed castlings
-
+                        if (this.props.onChange) {
+                            clearTimeout(this.onChangeDebounce)
+                            this.onChangeDebounce = setTimeout(() => {
+                                if (this.lastChangedValue !== value) {
+                                    this.props.onChange(value, this.state.fenValid)
+                                    this.lastChangedValue = value
+                                }
+                            }, 100)
+                        }
                     })
                     return value
                 },
@@ -99,7 +111,6 @@ export class FenEditor extends Component {
             modeButtons: context.querySelectorAll("button[data-mode]")
         }
 
-        console.log("test", window.location.hash)
         if (window.location.hash) {
             this.state.fen = decodeURIComponent(window.location.hash.substr(1))
         } else if (this.props.cookieName) {
@@ -187,7 +198,7 @@ export class FenEditor extends Component {
         }
         if (!castleWk) {
             const index = this.state.castling.indexOf("K")
-            console.log(index, this.state.castling)
+            // console.log(index, this.state.castling)
             if (index !== -1) {
                 this.state.castling.splice(index, 1)
             }
@@ -222,7 +233,7 @@ export class FenEditor extends Component {
                     (this.state.castling.length > 0 ? this.state.castling.join("") : "-") + " - 0 1"
                 if (newFen !== this.state.fen) {
                     this.state.fen = newFen
-                    console.log("updateFen", this.state.fen)
+                    // console.log("updateFen", this.state.fen)
                 }
                 if (this.props.cookieName) {
                     Cookie.write(this.props.cookieName, this.state.fen)
