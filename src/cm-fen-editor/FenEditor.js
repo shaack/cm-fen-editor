@@ -2,6 +2,7 @@ import {Component} from "../../lib/cm-web-modules/app/Component.js"
 import {Chessboard, COLOR, INPUT_EVENT_TYPE, MOVE_INPUT_MODE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
 import {Chess} from "../../lib/cm-chess/Chess.js"
+import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
 
 export const EDIT_MODE = {
     move: "move",
@@ -10,12 +11,13 @@ export const EDIT_MODE = {
     bk: "bk", bq: "bq", br: "br", bb: "bb", bn: "bn", bp: "bp"
 }
 
+// noinspection DuplicatedCode
 export class FenEditor extends Component {
     constructor(context, props) {
         props = Object.assign({
-            fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            fen: "8/8/8/8/8/8/8/8 w - - 0 1",
             spriteUrl: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg",
-            onChange: undefined,
+            // onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }, props)
         super(props, {
@@ -96,6 +98,21 @@ export class FenEditor extends Component {
             fenInputOutput: context.querySelector("#fenInputOutput"),
             modeButtons: context.querySelectorAll("button[data-mode]")
         }
+
+        console.log("test", window.location.hash)
+        if (window.location.hash) {
+            this.state.fen = decodeURIComponent(window.location.hash.substr(1))
+        } else if (this.props.cookieName) {
+            const fromCookie = Cookie.read(this.props.cookieName)
+            if (fromCookie) {
+                this.state.fen = fromCookie
+            } else {
+                this.state.fen = this.props.fen
+            }
+        } else {
+            this.state.fen = this.props.fen
+        }
+
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: this.props.fen,
             responsive: true,
@@ -206,6 +223,9 @@ export class FenEditor extends Component {
                 if (newFen !== this.state.fen) {
                     this.state.fen = newFen
                     console.log("updateFen", this.state.fen)
+                }
+                if (this.props.cookieName) {
+                    Cookie.write(this.props.cookieName, this.state.fen)
                 }
             }
         })
