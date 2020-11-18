@@ -20,7 +20,7 @@ export const EDIT_MODE = {
 export class FenEditor extends Component {
     constructor(context, props) {
         props = Object.assign({
-            fen: "8/8/8/8/8/8/8/8 w - - 0 1",
+            fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             spriteUrl: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg",
             onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
