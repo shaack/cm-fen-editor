@@ -69,7 +69,6 @@ export class FenEditor extends Component {
                     return value
                 },
                 parse: (value) => {
-                    // console.log(value)
                     try {
                         new Chess(value)
                         this.elements.fenInputOutput.classList.remove("is-invalid")
@@ -111,8 +110,9 @@ export class FenEditor extends Component {
             modeButtons: context.querySelectorAll("button[data-mode]")
         }
 
-        if (window.location.hash) {
-            this.state.fen = decodeURIComponent(window.location.hash.substr(1))
+        const fenFromURL = new URLSearchParams(window.location.search).get("fen")
+        if(fenFromURL) {
+            this.state.fen = fenFromURL
         } else if (this.props.cookieName) {
             const fromCookie = Cookie.read(this.props.cookieName)
             if (fromCookie) {
@@ -198,7 +198,6 @@ export class FenEditor extends Component {
         }
         if (!castleWk) {
             const index = this.state.castling.indexOf("K")
-            // console.log(index, this.state.castling)
             if (index !== -1) {
                 this.state.castling.splice(index, 1)
             }
@@ -227,13 +226,11 @@ export class FenEditor extends Component {
         clearTimeout(this.debounceFen)
         this.debounceFen = setTimeout(() => {
             if (this.state.fenValid) {
-                // console.log(this.state.allowedCastling.length)
                 const newFen = this.chessboard.getPosition() + " " +
                     this.state.colorToPlay + " " +
                     (this.state.castling.length > 0 ? this.state.castling.join("") : "-") + " - 0 1"
                 if (newFen !== this.state.fen) {
                     this.state.fen = newFen
-                    // console.log("updateFen", this.state.fen)
                 }
                 if (this.props.cookieName) {
                     Cookie.write(this.props.cookieName, this.state.fen)
