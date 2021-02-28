@@ -4,11 +4,11 @@
  * License: MIT, see file 'LICENSE'
  */
 
-import {Component} from "../../lib/cm-web-modules/app/Component.js"
-import {Chessboard, COLOR, INPUT_EVENT_TYPE, MOVE_INPUT_MODE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
-import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
-import {Chess} from "../../lib/cm-chess/Chess.js"
-import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
+import {Component} from "../../lib/cm-web-modules/app/Component.mjs"
+import {Chessboard, COLOR, INPUT_EVENT_TYPE, MOVE_INPUT_MODE, PIECE} from "../../lib/cm-chessboard/Chessboard.mjs"
+import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.mjs"
+import {Chess} from "../../lib/cm-chess/Chess.mjs"
+import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.mjs"
 
 export const EDIT_MODE = {
     move: "move",
@@ -33,7 +33,7 @@ export class FenEditor extends Component {
             castling: ["k", "K", "q", "Q"]
         }, {
             mode: {
-                callback: (value) => {
+                callback: () => {
                     setTimeout(() => {
                         for (const button of this.elements.modeButtons) {
                             if (this.state.mode === button.dataset.mode) {
