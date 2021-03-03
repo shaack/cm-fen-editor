@@ -138,7 +138,7 @@
 <script src="./node_modules/jquery/dist/jquery.min.js"></script>
 <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <script type="module">
-    import {FenEditor} from "./src/cm-fen-editor/FenEditor.mjs"
+    import {FenEditor} from "./src/cm-fen-editor/FenEditor.js"
 
     const editor = new FenEditor(document.getElementById("editorContainer"), {
         onChange: function(fen, valid) {
