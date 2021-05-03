@@ -127,7 +127,6 @@ export class FenEditor extends Component {
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: this.props.fen,
             responsive: true,
-            moveInputMode: MOVE_INPUT_MODE.dragPiece,
             sprite: {
                 url: this.props.spriteUrl
             },
@@ -147,7 +146,7 @@ export class FenEditor extends Component {
                         this.moveStartEvent = event
                         this.moveStartEvent.piece = this.chessboard.getPiece(event.square)
                     } else if (event.type === INPUT_EVENT_TYPE.moveCanceled && event.reason === MOVE_CANCELED_REASON.movedOutOfBoard) {
-                        this.chessboard.setPiece(this.moveStartEvent.square, null)
+                        this.chessboard.setPiece(this.moveStartEvent.square, undefined)
                     }
                     this.updateFen()
                     return true
@@ -156,7 +155,7 @@ export class FenEditor extends Component {
             case EDIT_MODE.erase:
                 this.chessboard.enableMoveInput((event) => {
                     if (event.type === INPUT_EVENT_TYPE.moveStart) {
-                        this.chessboard.setPiece(event.square, null)
+                        this.chessboard.setPiece(event.square, undefined)
                         this.updateFen()
                     }
                     return false
