@@ -5,7 +5,7 @@
  */
 
 import {Component} from "../../lib/cm-web-modules/app/Component.js"
-import {Chessboard, COLOR, INPUT_EVENT_TYPE, MOVE_INPUT_MODE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
+import {Chessboard, COLOR, INPUT_EVENT_TYPE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
 import {Chess} from "../../lib/cm-chess/Chess.js"
 import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
