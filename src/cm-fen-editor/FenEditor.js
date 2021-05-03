@@ -139,7 +139,7 @@ export class FenEditor extends Component {
 
     switchMode(toMode) {
         this.chessboard.disableMoveInput()
-        this.chessboard.disableBoardClick()
+        this.chessboard.disableSquareSelect()
         switch (toMode) {
             case EDIT_MODE.move:
                 this.chessboard.enableMoveInput((event) => {
@@ -163,7 +163,7 @@ export class FenEditor extends Component {
                 })
                 break
             default: // the pieces buttons
-                this.chessboard.enableBoardClick((event) => {
+                this.chessboard.enableSquareSelect((event) => {
                     this.chessboard.setPiece(event.square, this.state.mode)
                     this.updateFen()
                 })
