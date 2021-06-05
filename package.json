@@ -27,8 +27,8 @@
     "bootstrap": "^4.6.0",
     "chess.mjs": "^1.2.0",
     "cm-chess": "^2.1.1",
-    "cm-chessboard": "^3.10.8",
-    "cm-web-modules": "^1.7.6",
+    "cm-chessboard": "^3.12.12",
+    "cm-web-modules": "^1.7.8",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1"
   }
