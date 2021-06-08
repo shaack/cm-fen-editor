@@ -6,8 +6,8 @@
 const LibraryManager = require("cm-web-modules/src/LibraryManager.js")
 const manager = new LibraryManager(__dirname)
 
-manager.addProject("cm-web-modules")
-manager.addProject("cm-chessboard")
-manager.addProject("cm-chess")
-manager.addProject("chess.mjs")
-manager.addProject("cm-pgn")
+manager.addPackage("cm-web-modules")
+manager.addPackage("cm-chessboard")
+manager.addPackage("cm-chess")
+manager.addPackage("chess.mjs")
+manager.addPackage("cm-pgn")
