@@ -4,11 +4,12 @@
  * License: MIT, see file 'LICENSE'
  */
 
-import {BindApp} from "../../lib/cm-web-modules/app/BindApp.js"
+import {Component} from "../../lib/cm-web-modules/app/Component.js"
 import {Chessboard, COLOR, INPUT_EVENT_TYPE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
 import {Chess} from "../../lib/cm-chess/Chess.js"
 import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
+import {Bind} from "../../lib/bind.mjs/Bind.js";
 
 export const EDIT_MODE = {
     move: "move",
@@ -17,7 +18,7 @@ export const EDIT_MODE = {
     bk: "bk", bq: "bq", br: "br", bb: "bb", bn: "bn", bp: "bp"
 }
 
-export class FenEditor extends BindApp {
+export class FenEditor extends Component {
     constructor(context, props) {
         props = Object.assign({
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
@@ -25,7 +26,8 @@ export class FenEditor extends BindApp {
             onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }, props)
-        super(props, {
+        super(context, props)
+        this.state = Bind({
             mode: EDIT_MODE.move,
             fen: props.fen,
             fenValid: true,
@@ -99,11 +101,13 @@ export class FenEditor extends BindApp {
                     })
                 }
             }
-        }, {
+        })
+
+        this.actions = {
             switchMode: (event) => {
                 this.state.mode = event.target.dataset.mode
             }
-        }, context)
+        }
         this.elements = {
             chessboard: context.querySelector(".chessboard"),
             fenInputOutput: context.querySelector("#fenInputOutput"),
@@ -111,7 +115,7 @@ export class FenEditor extends BindApp {
         }
 
         const fenFromURL = new URLSearchParams(window.location.search).get("fen")
-        if(fenFromURL) {
+        if (fenFromURL) {
             this.state.fen = fenFromURL
         } else if (this.props.cookieName) {
             const fromCookie = Cookie.read(this.props.cookieName)
