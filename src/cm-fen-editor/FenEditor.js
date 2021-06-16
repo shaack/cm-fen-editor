@@ -138,6 +138,7 @@ export class FenEditor extends Component {
                 aspectRatio: 0.94
             }
         })
+        this.addDataEventListeners()
     }
 
     switchMode(toMode) {
