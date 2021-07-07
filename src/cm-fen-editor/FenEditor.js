@@ -26,7 +26,7 @@ export class FenEditor extends Component {
             onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }, props)
-        super(context, props)
+        super(undefined, context, props)
         this.state = Bind({
             mode: EDIT_MODE.move,
             fen: props.fen,
