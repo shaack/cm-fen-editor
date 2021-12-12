@@ -4,7 +4,7 @@
  * License: MIT, see file 'LICENSE'
  */
 
-import {Component} from "../../lib/cm-web-modules/app/Component.js"
+import {UiComponent} from "../../lib/cm-web-modules/app/Component.js"
 import {Chessboard, COLOR, INPUT_EVENT_TYPE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
 import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/ChessboardMoveInput.js"
 import {Chess} from "../../lib/cm-chess/Chess.js"
@@ -18,7 +18,7 @@ export const EDIT_MODE = {
     bk: "bk", bq: "bq", br: "br", bb: "bb", bn: "bn", bp: "bp"
 }
 
-export class FenEditor extends Component {
+export class FenEditor extends UiComponent {
     constructor(context, props) {
         props = Object.assign({
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
@@ -26,7 +26,7 @@ export class FenEditor extends Component {
             onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }, props)
-        super(undefined, context, props)
+        super(context, props)
         this.state = Bind({
             mode: EDIT_MODE.move,
             fen: props.fen,
