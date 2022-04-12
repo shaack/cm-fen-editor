@@ -16,6 +16,6 @@ A FEN editor for the web written in vanilla ES6
 
 ## Install
 
-Run `npm install` to install dependencies and get it working. 
+Run `npm install` to install the dependencies and get it working. 
 Then you can request `/index.html` in a webserver environment to
 have a working FEN editor.
