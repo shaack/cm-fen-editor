@@ -4,11 +4,11 @@
  */
 
 const ModRator = require("modrator/src/ModRator.js")
-const modRator = new ModRator(__dirname)
+const modrator = new ModRator(__dirname)
 
-modRator.addToLibrary("cm-web-modules")
-modRator.addToLibrary("cm-chessboard")
-modRator.addToLibrary("cm-chess")
-modRator.addToLibrary("chess.mjs")
-modRator.addToLibrary("bind.mjs")
-modRator.addToLibrary("cm-pgn")
+modrator.addToLibrary("cm-web-modules")
+modrator.addToLibrary("cm-chessboard")
+modrator.addToLibrary("cm-chess")
+modrator.addToLibrary("chess.mjs")
+modrator.addToLibrary("bind.mjs")
+modrator.addToLibrary("cm-pgn")
