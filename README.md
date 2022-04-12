@@ -13,3 +13,9 @@ A FEN editor for the web written in vanilla ES6
 - [cm-web-modules](https://github.com/shaack/cm-web-modules) ES6 toolbox for building web applications
 - [Bind.js](https://github.com/remy/bind.js) Nice and simple two-way data binding
 - [Bootstrap 4](https://getbootstrap.com/)
+
+## Install
+
+Run `npm install` to install dependencies and get it working. 
+Then you can request `/index.html` in a webserver environment to
+have a working FEN editor.
