@@ -27,9 +27,9 @@
     "bind.mjs": "^1.1.0",
     "bootstrap": "^4.6.0",
     "chess.mjs": "^1.2.0",
-    "cm-chess": "^2.1.6",
-    "cm-chessboard": "^3.16.3",
-    "cm-web-modules": "^1.15.0",
+    "cm-chess": "^2.2.0",
+    "cm-chessboard": "^3.17.0",
+    "cm-web-modules": "^1.16.1",
     "jquery": "^3.6.0",
     "modrator": "^1.2.1",
     "popper.js": "^1.16.1"

@@ -131,6 +131,7 @@ export class FenEditor extends UiComponent {
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: this.props.fen,
             responsive: true,
+            accessible: true,
             sprite: {
                 url: this.props.spriteUrl
             },
