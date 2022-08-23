@@ -25,13 +25,12 @@
   "homepage": "https://github.com/shaack/cm-fen-editor#readme",
   "dependencies": {
     "bind.mjs": "^1.1.0",
-    "bootstrap": "^4.6.2",
+    "bootstrap": "^5.2.0",
     "chess.mjs": "^1.2.0",
     "cm-chess": "^2.3.4",
-    "cm-chessboard": "^4.4.2",
-    "cm-web-modules": "^1.18.3",
-    "jquery": "^3.6.0",
-    "modrator": "^1.2.1",
+    "cm-chessboard": "^5.1.9",
+    "cm-web-modules": "^1.18.5",
+    "modlib": "^1.2.10",
     "popper.js": "^1.16.1"
   }
 }

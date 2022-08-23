@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <link rel="stylesheet" href="./node_modules/cm-chessboard/assets/styles/cm-chessboard.css"/>
     <link rel="stylesheet" href="./assets/style/screen.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
     <title>FEN Editor</title>
 </head>
 <body>
@@ -15,14 +15,14 @@
         <h1>cm-fen-editor, a FEN editor for the web</h1>
         <div id="editorContainer" class="cm-fen-editor">
             <form>
-                <div class="form-group row">
+                <div class="form-group row mb-4 g-3">
                     <label for="fenInputOutput" class="col-auto col-form-label d-none d-md-block">FEN</label>
-                    <div class="col pl-md-0">
+                    <div class="col">
                         <input type="text" class="form-control fen-input-output" id="fenInputOutput">
                     </div>
-                    <div class="col-auto pl-0">
-                        <label for="positionSetUp" class="sr-only">Position setups</label>
-                        <select class="form-control fen-input-output" id="positionSetUp">
+                    <div class="col-auto">
+                        <label for="positionSetUp" class="visually-hidden">Position setups</label>
+                        <select class="form-select fen-input-output" id="positionSetUp">
                             <option value=""></option>
                             <option value="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1">
                                 Starting Position
@@ -38,7 +38,8 @@
                 <div class="col-xl-7 col-md-7 mb-3">
                     <div class="chessboard"></div>
                 </div>
-                <div class="col-xl-5 col-md-5" data-event-listener="click" data-delegate="button[data-mode]" data-action="switchMode">
+                <div class="col-xl-5 col-md-5" data-event-listener="click" data-delegate="button[data-mode]"
+                     data-action="switchMode">
                     <div class="buttons mb-1">
                         <button data-mode="move" class="btn btn-outline-success w-100 mb-2">
                             <i class="fas fa-hand-pointer"></i> Move
@@ -50,77 +51,87 @@
                     <div class="mb-2 clearfix">
                         <div class="buttons-figures buttons-figures-dark">
                             <button data-mode="bk" class="btn btn-light border-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-king"></i><span class="sr-only">King black</span>
+                                <i class="fas fa-fw fa-2x fa-chess-king"></i><span
+                                    class="visually-hidden">King black</span>
                             </button>
                             <button data-mode="bq" class="btn btn-light border-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-queen"></i><span class="sr-only">Queen black</span>
+                                <i class="fas fa-fw fa-2x fa-chess-queen"></i><span
+                                    class="visually-hidden">Queen black</span>
                             </button>
                             <button data-mode="br" class="btn btn-light border-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-rook"></i><span class="sr-only">Rook black</span>
+                                <i class="fas fa-fw fa-2x fa-chess-rook"></i><span
+                                    class="visually-hidden">Rook black</span>
                             </button>
                             <button data-mode="bb" class="btn btn-light border-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-bishop"></i><span class="sr-only">Bishop black</span>
+                                <i class="fas fa-fw fa-2x fa-chess-bishop"></i><span class="visually-hidden">Bishop black</span>
                             </button>
                             <button data-mode="bn" class="btn btn-light border-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-knight"></i><span class="sr-only">Knight black</span>
+                                <i class="fas fa-fw fa-2x fa-chess-knight"></i><span class="visually-hidden">Knight black</span>
                             </button>
                             <button data-mode="bp" class="btn btn-light border-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-pawn"></i><span class="sr-only">Pawn black</span>
+                                <i class="fas fa-fw fa-2x fa-chess-pawn"></i><span
+                                    class="visually-hidden">Pawn black</span>
                             </button>
                         </div>
                         <div class="buttons-figures buttons-figures-light">
                             <button data-mode="wk" class="btn btn-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-king"></i><span class="sr-only">King white</span>
+                                <i class="fas fa-fw fa-2x fa-chess-king"></i><span
+                                    class="visually-hidden">King white</span>
                             </button>
                             <button data-mode="wq" class="btn btn-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-queen"></i><span class="sr-only">Queen white</span>
+                                <i class="fas fa-fw fa-2x fa-chess-queen"></i><span
+                                    class="visually-hidden">Queen white</span>
                             </button>
                             <button data-mode="wr" class="btn btn-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-rook"></i><span class="sr-only">Rook white</span>
+                                <i class="fas fa-fw fa-2x fa-chess-rook"></i><span
+                                    class="visually-hidden">Rook white</span>
                             </button>
                             <button data-mode="wb" class="btn btn-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-bishop"></i><span class="sr-only">Bishop white</span>
+                                <i class="fas fa-fw fa-2x fa-chess-bishop"></i><span class="visually-hidden">Bishop white</span>
                             </button>
                             <button data-mode="wn" class="btn btn-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-knight"></i><span class="sr-only">Knight white</span>
+                                <i class="fas fa-fw fa-2x fa-chess-knight"></i><span class="visually-hidden">Knight white</span>
                             </button>
                             <button data-mode="wp" class="btn btn-dark">
-                                <i class="fas fa-fw fa-2x fa-chess-pawn"></i><span class="sr-only">Pawn white</span>
+                                <i class="fas fa-fw fa-2x fa-chess-pawn"></i><span
+                                    class="visually-hidden">Pawn white</span>
                             </button>
                         </div>
                     </div>
                     <div class="card conditions-inputs bg-light">
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="colorToPlay" class="sr-only">Color to play</label>
-                                <select class="form-control" id="colorToPlay">
+                            <div class="form-group mb-3">
+                                <label for="colorToPlay" class="visually-hidden">Color to play</label>
+                                <select class="form-select" id="colorToPlay">
                                     <option value="w">White to play</option>
                                     <option value="b">Black to play</option>
                                 </select>
                             </div>
                             <p class="mb-2">Allowed castling</p>
-                            <div class="clearfix">
-                                <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" name="castling" class="checkbox-castle custom-control-input" id="castle-wk"
-                                           value="K">
-                                    <label class="custom-control-label" for="castle-wk">White O-O</label>
+                            <div class="row">
+                                <div class="col-6 col-md-12 col-lg-6">
+                                    <div class="">
+                                        <input type="checkbox" name="castling" class="checkbox-castle" id="castle-wk"
+                                               value="K">
+                                        <label class="custom-control-label" for="castle-wk">White O-O</label>
+                                    </div>
+                                    <div class="">
+                                        <input type="checkbox" name="castling" class="checkbox-castle" id="castle-wq"
+                                               value="Q">
+                                        <label class="custom-control-label" for="castle-wq">White O-O-O</label>
+                                    </div>
                                 </div>
-                                <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" name="castling" class="checkbox-castle custom-control-input" id="castle-wq"
-                                           value="Q">
-                                    <label class="custom-control-label" for="castle-wq">White O-O-O</label>
-                                </div>
-                            </div>
-                            <div class="clearfix">
-                                <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" name="castling" class="checkbox-castle custom-control-input" id="castle-bk"
-                                           value="k">
-                                    <label class="custom-control-label" for="castle-bk">Black O-O</label>
-                                </div>
-                                <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input type="checkbox" name="castling" class="checkbox-castle custom-control-input" id="castle-bq"
-                                           value="q">
-                                    <label class="custom-control-label" for="castle-bq">Black O-O-O</label>
+                                <div class="col-6 col-md-12 col-lg-6">
+                                    <div class="">
+                                        <input type="checkbox" name="castling" class="checkbox-castle" id="castle-bk"
+                                               value="k">
+                                        <label class="custom-control-label" for="castle-bk">Black O-O</label>
+                                    </div>
+                                    <div class="">
+                                        <input type="checkbox" name="castling" class="checkbox-castle" id="castle-bq"
+                                               value="q">
+                                        <label class="custom-control-label" for="castle-bq">Black O-O-O</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -135,13 +146,12 @@
         </ul>
     </div>
 </main>
-<script src="./node_modules/jquery/dist/jquery.min.js"></script>
 <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 <script type="module">
     import {FenEditor} from "./src/cm-fen-editor/FenEditor.js"
 
     new FenEditor(document.getElementById("editorContainer"), {
-        onChange: function(fen, valid) {
+        onChange: function (fen, valid) {
             console.log("onChange callback", fen, valid)
         }
     })
