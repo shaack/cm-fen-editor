@@ -10,6 +10,7 @@ import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/view/VisualMoveInput
 import {Chess} from "../../lib/cm-chess/Chess.js"
 import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
 import {Bind} from "../../lib/bind.mjs/Bind.js";
+import {Markers} from "../../lib/cm-chessboard/extensions/markers/Markers.js"
 
 export const EDIT_MODE = {
     move: "move",
@@ -22,7 +23,8 @@ export class FenEditor extends UiComponent {
     constructor(context, props) {
         props = Object.assign({
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-            spriteUrl: "./node_modules/cm-chessboard/assets/images/chessboard-sprite.svg",
+            piecesFile: "standard.svg",
+            assetsUrl: "../node_modules/cm-chessboard/assets/",
             onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }, props)
@@ -130,14 +132,12 @@ export class FenEditor extends UiComponent {
 
         this.chessboard = new Chessboard(this.elements.chessboard, {
             position: this.props.fen,
-            responsive: true,
-            accessible: true,
-            sprite: {
-                url: this.props.spriteUrl
-            },
+            assetsUrl: this.props.assetsUrl,
             style: {
-                aspectRatio: 0.94
-            }
+                aspectRatio: 0.94,
+                pieces: {file: this.props.piecesFile}
+            },
+            extensions: [{class: Markers}],
         })
         this.addDataEventListeners()
     }
@@ -148,10 +148,10 @@ export class FenEditor extends UiComponent {
         switch (toMode) {
             case EDIT_MODE.move:
                 this.chessboard.enableMoveInput((event) => {
-                    if (event.type === INPUT_EVENT_TYPE.moveStart) {
+                    if (event.type === INPUT_EVENT_TYPE.moveInputStarted) {
                         this.moveStartEvent = event
                         this.moveStartEvent.piece = this.chessboard.getPiece(event.square)
-                    } else if (event.type === INPUT_EVENT_TYPE.moveCanceled && event.reason === MOVE_CANCELED_REASON.movedOutOfBoard) {
+                    } else if (event.type === INPUT_EVENT_TYPE.moveInputCanceled && event.reason === MOVE_CANCELED_REASON.movedOutOfBoard) {
                         this.chessboard.setPiece(this.moveStartEvent.square, undefined)
                     }
                     this.updateFen()
@@ -160,7 +160,7 @@ export class FenEditor extends UiComponent {
                 break
             case EDIT_MODE.erase:
                 this.chessboard.enableMoveInput((event) => {
-                    if (event.type === INPUT_EVENT_TYPE.moveStart) {
+                    if (event.type === INPUT_EVENT_TYPE.moveInputStarted) {
                         this.chessboard.setPiece(event.square, undefined)
                         this.updateFen()
                     }
