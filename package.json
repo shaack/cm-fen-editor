@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"No test specified\"",
-    "postinstall": "node postinstall.js"
+    "postinstall": "node postinstall.cjs"
   },
   "repository": {
     "type": "git",
@@ -28,10 +28,10 @@
     "bind.mjs": "^1.1.0",
     "bootstrap": "^5.2.3",
     "chess.mjs": "^1.3.1",
-    "cm-chess": "^2.4.2",
-    "cm-chessboard": "^7.2.5",
-    "cm-web-modules": "^1.18.11",
-    "modlib": "^1.2.10",
+    "cm-chess": "^2.4.4",
+    "cm-chessboard": "^7.3.2",
+    "cm-web-modules": "^1.18.12",
+    "modlib": "^1.2.12",
     "popper.js": "^1.16.1"
   }
 }
