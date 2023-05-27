@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"No test specified\"",
-    "postinstall": "node postinstall.cjs"
+    "test": "echo \"No test specified\""
   },
   "repository": {
     "type": "git",
@@ -26,12 +25,9 @@
   "homepage": "https://github.com/shaack/cm-fen-editor#readme",
   "dependencies": {
     "bind.mjs": "^1.1.0",
-    "bootstrap": "^5.2.3",
-    "chess.mjs": "^1.3.1",
-    "cm-chess": "^2.4.4",
-    "cm-chessboard": "^7.3.2",
-    "cm-web-modules": "^1.18.12",
-    "modlib": "^1.2.12",
-    "popper.js": "^1.16.1"
+    "chess.mjs": "^1.4.0",
+    "cm-chess": "^3.3.2",
+    "cm-chessboard": "^7.6.10",
+    "cm-web-modules": "^2.0.0"
   }
 }

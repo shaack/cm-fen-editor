@@ -4,13 +4,13 @@
  * License: MIT, see file 'LICENSE'
  */
 
-import {UiComponent} from "../../lib/cm-web-modules/app/Component.js"
-import {Chessboard, COLOR, INPUT_EVENT_TYPE, PIECE} from "../../lib/cm-chessboard/Chessboard.js"
-import {MOVE_CANCELED_REASON} from "../../lib/cm-chessboard/view/VisualMoveInput.js"
-import {Chess} from "../../lib/cm-chess/Chess.js"
-import {Cookie} from "../../lib/cm-web-modules/cookie/Cookie.js"
-import {Bind} from "../../lib/bind.mjs/Bind.js";
-import {Markers} from "../../lib/cm-chessboard/extensions/markers/Markers.js"
+import {UiComponent} from "cm-web-modules/src/app/Component.js"
+import {Chessboard, COLOR, INPUT_EVENT_TYPE, PIECE} from "cm-chessboard/src/Chessboard.js"
+import {MOVE_CANCELED_REASON} from "cm-chessboard/src/view/VisualMoveInput.js"
+import {Markers} from "cm-chessboard/src/extensions/markers/Markers.js"
+import {Chess} from "cm-chess/src/Chess.js"
+import {Cookie} from "cm-web-modules/src/cookie/Cookie.js"
+import {Bind} from "bind.mjs/src/bind.mjs/Bind.js";
 
 export const EDIT_MODE = {
     move: "move",
