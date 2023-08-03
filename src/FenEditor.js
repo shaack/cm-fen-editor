@@ -122,9 +122,19 @@ export class FenEditor {
         }
         if (this.state.fenIsValid) {
             this.updateValidState()
+            if (this.props.onChange) {
+                this.props.onChange({
+                    fen: this.state.fen.toString()
+                })
+            }
         } else {
             this.elements.fenInputOutput.classList.add("is-invalid")
             console.warn("invalid fen", this.state.fen.toString())
+            if (this.props.onChange) {
+                this.props.onChange({
+                    fen: null
+                })
+            }
         }
     }
 
@@ -140,11 +150,6 @@ export class FenEditor {
         this.elements.castling.bq.checked = this.state.fen.castlings.includes("q")
         this.chessboard.setPosition(fenString, false)
         Cookie.write(this.props.cookieName, fenString)
-        if (this.props.onChange) {
-            this.props.onChange({
-                fen: this.state.fen.toString()
-            })
-        }
     }
 
     removeNotAllowedCastlings() {
