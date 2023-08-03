@@ -5,13 +5,9 @@
   float: left;
   margin-bottom: 0.4rem;
   margin-right: 0.4rem;
-  background-color: #888;
   padding: 0.35rem 0.8rem; }
 
-.cm-fen-editor .buttons-figures.buttons-figures button:active, .cm-fen-editor .buttons-figures.buttons-figures button.active {
-  background-color: #aaa; }
-
 .max-width-xxl {
-  max-width: 1025px; }
+  max-width: 1024px; }
 
 /*# sourceMappingURL=screen.css.map */

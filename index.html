@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1.0"/>
@@ -11,6 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/style/screen.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
+    <script src="./node_modules/bootstrap-auto-dark-mode/src/bootstrap-auto-dark-mode.js"></script>
     <title>FEN Editor</title>
 </head>
 <body>
@@ -41,8 +42,8 @@
                     <div class="chessboard"></div>
                 </div>
                 <div class="col-xl-5 col-md-5">
-                    <div class="card conditions-inputs bg-light mb-3">
-                        <div class="card-body">
+                    <div class="card conditions-inputs mb-3">
+                        <div class="card-header p-3">
                             <div class="form-group mb-3">
                                 <label for="colorToPlay" class="visually-hidden">Color to play</label>
                                 <select class="form-select color-to-play" id="colorToPlay">
