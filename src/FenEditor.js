@@ -4,52 +4,101 @@
  * License: MIT, see file 'LICENSE'
  */
 
-import {UiComponent} from "cm-web-modules/src/app/Component.js"
-import {Chessboard, COLOR, INPUT_EVENT_TYPE, PIECE} from "cm-chessboard/src/Chessboard.js"
-import {MOVE_CANCELED_REASON} from "cm-chessboard/src/view/VisualMoveInput.js"
+import {Chessboard, PIECE} from "cm-chessboard/src/Chessboard.js"
 import {Markers} from "cm-chessboard/src/extensions/markers/Markers.js"
-import {Chess} from "cm-chess/src/Chess.js"
+import {Chess, FEN} from "cm-chess/src/Chess.js"
 import {Cookie} from "cm-web-modules/src/cookie/Cookie.js"
-import {Bind} from "bind.mjs/src/bind.mjs/Bind.js";
+import {PositionEditor} from "cm-chessboard-position-editor/src/PositionEditor.js"
+import {Observed} from "cm-web-modules/src/observed/Observed.js"
+import {Fen} from "cm-chess/src/Fen.js"
 
-export const EDIT_MODE = {
-    move: "move",
-    erase: "erase",
-    wk: "wk", wq: "wq", wr: "wr", wb: "wb", wn: "wn", wp: "wp",
-    bk: "bk", bq: "bq", br: "br", bb: "bb", bn: "bn", bp: "bp"
-}
-
-export class FenEditor extends UiComponent {
+export class FenEditor {
+    // noinspection SillyAssignmentJS
     constructor(context, props) {
-        props = Object.assign({
+        this.props = Object.assign({
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-            piecesFile: "standard.svg",
+            piecesFile: "pieces/standard.svg",
             assetsUrl: "../node_modules/cm-chessboard/assets/",
             onChange: undefined,
             cookieName: "cfe-fen" // set to null, if you don't want to persist the position
         }, props)
-        super(context, props)
+        Object.assign(this.props, props)
+        this.state = new Observed({
+            fen: new Fen(this.props.fen),
+            fenIsValid: true,
+            // colorToPlay: COLOR.white,
+            // castling: ["k", "K", "q", "Q"]
+        })
+        this.elements = {
+            chessboardContext: context.querySelector(".chessboard"),
+            fenInputOutput: context.querySelector(".fen-input-output"),
+            fenSelect: context.querySelector(".fen-select"),
+            colorToPlay: context.querySelector(".colo-to-play"),
+            castling: {
+                wk: context.querySelector(".checkbox-castle-wk"),
+                wq: context.querySelector(".checkbox-castle-wq"),
+                bk: context.querySelector(".checkbox-castle-bk"),
+                bq: context.querySelector(".checkbox-castle-bq")
+            }
+        }
+        this.state.addObserver(() => {
+            this.onFenChanged()
+        }, ["fen"])
+        this.elements.fenInputOutput.addEventListener("change", (e) => {
+            console.log("change input", e.target.value)
+            this.state.fen.parse(e.target.value)
+            // noinspection SillyAssignmentJS
+            this.state.fen = this.state.fen // to trigger the observer
+            e.preventDefault()
+        })
+        this.elements.fenSelect.addEventListener("change", (e) => {
+            console.log("change select", e.target.value)
+            this.state.fen.parse(e.target.value)
+            // noinspection SillyAssignmentJS
+            this.state.fen = this.state.fen // to trigger the observer
+            e.preventDefault()
+        })
+        const fenFromURL = new URLSearchParams(window.location.search).get("fen")
+        if (fenFromURL) {
+            this.state.fen.parse(fenFromURL)
+        } else if (this.props.cookieName) {
+            const fromCookie = Cookie.read(this.props.cookieName)
+            if (fromCookie) {
+                console.log("reading from cookie", fromCookie)
+                this.state.fen.parse(fromCookie)
+            } else {
+                this.state.fen.parse(this.props.fen)
+            }
+        }
+        this.chessboard = new Chessboard(this.elements.chessboardContext, {
+            position: FEN.empty,
+            assetsUrl: this.props.assetsUrl,
+            style: {
+                aspectRatio: 0.94,
+                pieces: {file: this.props.piecesFile}
+            },
+            extensions: [{
+                class: PositionEditor, props: {
+                    autoSpecialMoves: false,
+                    onPositionChanged: (event) => {
+                        this.state.fen.position = event.position
+                        // noinspection SillyAssignmentJS
+                        this.state.fen = this.state.fen // to trigger the observer
+                    }
+                }
+            }, {class: Markers}],
+        })
+        this.chessboard.initialized.then(() => {
+            this.onFenChanged()
+        })
+
+        /*
         this.state = Bind({
-            mode: EDIT_MODE.move,
             fen: props.fen,
             fenValid: true,
             colorToPlay: COLOR.white,
             castling: ["k", "K", "q", "Q"]
         }, {
-            mode: {
-                callback: () => {
-                    setTimeout(() => {
-                        for (const button of this.elements.modeButtons) {
-                            if (this.state.mode === button.dataset.mode) {
-                                button.classList.add("active")
-                            } else {
-                                button.classList.remove("active")
-                            }
-                        }
-                        this.switchMode(this.state.mode)
-                    })
-                }
-            },
             fen: {
                 dom: ".fen-input-output",
                 transform: (value) => {
@@ -104,75 +153,32 @@ export class FenEditor extends UiComponent {
                 }
             }
         })
-
-        this.actions = {
-            switchMode: (event) => {
-                this.state.mode = event.target.dataset.mode
-            }
-        }
-        this.elements = {
-            chessboard: context.querySelector(".chessboard"),
-            fenInputOutput: context.querySelector("#fenInputOutput"),
-            modeButtons: context.querySelectorAll("button[data-mode]")
-        }
-
-        const fenFromURL = new URLSearchParams(window.location.search).get("fen")
-        if (fenFromURL) {
-            this.state.fen = fenFromURL
-        } else if (this.props.cookieName) {
-            const fromCookie = Cookie.read(this.props.cookieName)
-            if (fromCookie) {
-                this.state.fen = fromCookie
-            } else {
-                this.state.fen = this.props.fen
-            }
-        } else {
-            this.state.fen = this.props.fen
-        }
-
-        this.chessboard = new Chessboard(this.elements.chessboard, {
-            position: this.props.fen,
-            assetsUrl: this.props.assetsUrl,
-            style: {
-                aspectRatio: 0.94,
-                pieces: {file: this.props.piecesFile}
-            },
-            extensions: [{class: Markers}],
-        })
-        this.addDataEventListeners()
+*/
     }
 
-    switchMode(toMode) {
-        this.chessboard.disableMoveInput()
-        this.chessboard.disableSquareSelect()
-        switch (toMode) {
-            case EDIT_MODE.move:
-                this.chessboard.enableMoveInput((event) => {
-                    if (event.type === INPUT_EVENT_TYPE.moveInputStarted) {
-                        this.moveStartEvent = event
-                        this.moveStartEvent.piece = this.chessboard.getPiece(event.square)
-                    } else if (event.type === INPUT_EVENT_TYPE.moveInputCanceled && event.reason === MOVE_CANCELED_REASON.movedOutOfBoard) {
-                        this.chessboard.setPiece(this.moveStartEvent.square, undefined)
-                    }
-                    this.updateFen()
-                    return true
+    onFenChanged() {
+        // console.log("onFenChanged", this.state.fen)
+        try {
+            new Chess(this.state.fen.toString())
+            this.state.fenIsValid = true
+        } catch (e) {
+            this.state.fenIsValid = false
+        }
+        if (this.state.fenIsValid) {
+            const fenString = this.state.fen.toString()
+            this.elements.fenInputOutput.value = fenString
+            this.elements.fenSelect.value = fenString
+            this.chessboard.setPosition(fenString, false).then(() => {
+            })
+            Cookie.write(this.props.cookieName, fenString)
+            if (this.props.onChange) {
+                this.props.onChange({
+                    fen: this.state.fen.toString()
                 })
-                break
-            case EDIT_MODE.erase:
-                this.chessboard.enableMoveInput((event) => {
-                    if (event.type === INPUT_EVENT_TYPE.moveInputStarted) {
-                        this.chessboard.setPiece(event.square, undefined)
-                        this.updateFen()
-                    }
-                    return false
-                })
-                break
-            default: // the pieces buttons
-                this.chessboard.enableSquareSelect((event) => {
-                    this.chessboard.setPiece(event.square, this.state.mode)
-                    this.updateFen()
-                })
-                break
+            }
+            this.elements.fenInputOutput.classList.remove("is-invalid")
+        } else {
+            this.elements.fenInputOutput.classList.add("is-invalid")
         }
     }
 
@@ -227,20 +233,23 @@ export class FenEditor extends UiComponent {
         }
     }
 
-    updateFen() {
-        clearTimeout(this.debounceFen)
-        this.debounceFen = setTimeout(() => {
-            if (this.state.fenValid) {
-                const newFen = this.chessboard.getPosition() + " " +
-                    this.state.colorToPlay + " " +
-                    (this.state.castling.length > 0 ? this.state.castling.join("") : "-") + " - 0 1"
-                if (newFen !== this.state.fen) {
-                    this.state.fen = newFen
+    /*
+        updateFen() {
+            clearTimeout(this.debounceFen)
+            this.debounceFen = setTimeout(() => {
+                if (this.state.fenValid) {
+                    const newFen = this.chessboard.getPosition() + " " +
+                        this.state.colorToPlay + " " +
+                        (this.state.castling.length > 0 ? this.state.castling.join("") : "-") + " - 0 1"
+                    if (newFen !== this.state.fen) {
+                        this.state.fen = newFen
+                    }
+                    if (this.props.cookieName) {
+                        Cookie.write(this.props.cookieName, this.state.fen)
+                    }
                 }
-                if (this.props.cookieName) {
-                    Cookie.write(this.props.cookieName, this.state.fen)
-                }
-            }
-        })
-    }
+            })
+        }
+
+     */
 }

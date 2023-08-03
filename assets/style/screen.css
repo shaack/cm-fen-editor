@@ -11,4 +11,7 @@
 .cm-fen-editor .buttons-figures.buttons-figures button:active, .cm-fen-editor .buttons-figures.buttons-figures button.active {
   background-color: #aaa; }
 
+.max-width-xxl {
+  max-width: 1025px; }
+
 /*# sourceMappingURL=screen.css.map */
