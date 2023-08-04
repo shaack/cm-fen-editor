@@ -28,6 +28,7 @@ export class FenEditor {
             fen: new Fen(this.props.fen),
             fenIsValid: true
         })
+        this.state.addObserver(() => this.onFenChanged(), ["fen"])
         this.elements = {
             chessboardContext: context.querySelector(".chessboard"),
             fenInputOutput: context.querySelector(".fen-input-output"),
@@ -46,19 +47,17 @@ export class FenEditor {
     }
 
     setEventListeners(context) {
-        this.state.addObserver(() => this.onFenChanged(), ["fen"])
-        this.elements.fenInputOutput.addEventListener("change", this.setInputState)
-        this.elements.fenSelect.addEventListener("change", this.setInputState)
+        const setStateFromInput = (e) => {
+            this.state.fen.parse(e.target.value)
+            this.state.fen = this.state.fen
+        }
+        this.elements.fenInputOutput.addEventListener("change", setStateFromInput)
+        this.elements.fenSelect.addEventListener("change", setStateFromInput)
         this.elements.colorToPlay.addEventListener("change", (e) => {
             this.state.fen.colorToPlay = e.target.value
             this.state.fen = this.state.fen
         })
         DomUtils.delegate(context, "change", ".checkbox-castle", this.setCastleState)
-    }
-
-    setInputState = (e) => {
-        this.state.fen.parse(e.target.value)
-        this.state.fen = this.state.fen
     }
 
     setCastleState = () => {
@@ -87,6 +86,7 @@ export class FenEditor {
         } else if (this.props.cookieName && fenFromCookie) {
             this.state.fen.parse(fenFromCookie)
         }
+        this.state.fen = this.state.fen
     }
 
     initChessboard() {
@@ -107,9 +107,6 @@ export class FenEditor {
                     }
                 }
             }, {class: Markers}],
-        })
-        this.chessboard.initialized.then(() => {
-            this.onFenChanged()
         })
     }
 
@@ -140,16 +137,19 @@ export class FenEditor {
 
     updateValidState() {
         const fenString = this.state.fen.toString()
-        this.elements.fenInputOutput.classList.remove("is-invalid")
-        this.elements.fenInputOutput.value = fenString
-        this.elements.fenSelect.value = fenString
-        this.elements.colorToPlay.value = this.state.fen.colorToPlay
-        this.elements.castling.wk.checked = this.state.fen.castlings.includes("K")
-        this.elements.castling.wq.checked = this.state.fen.castlings.includes("Q")
-        this.elements.castling.bk.checked = this.state.fen.castlings.includes("k")
-        this.elements.castling.bq.checked = this.state.fen.castlings.includes("q")
-        this.chessboard.setPosition(fenString, false)
-        Cookie.write(this.props.cookieName, fenString)
+        this.chessboard.setPosition(fenString, false).then(() => {
+            this.removeNotAllowedCastlings()
+            const fenString = this.state.fen.toString()
+            this.elements.fenInputOutput.classList.remove("is-invalid")
+            this.elements.fenInputOutput.value = fenString
+            this.elements.fenSelect.value = fenString
+            this.elements.colorToPlay.value = this.state.fen.colorToPlay
+            this.elements.castling.wk.checked = this.state.fen.castlings.includes("K")
+            this.elements.castling.wq.checked = this.state.fen.castlings.includes("Q")
+            this.elements.castling.bk.checked = this.state.fen.castlings.includes("k")
+            this.elements.castling.bq.checked = this.state.fen.castlings.includes("q")
+            Cookie.write(this.props.cookieName, fenString)
+        })
     }
 
     removeNotAllowedCastlings() {
