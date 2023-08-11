@@ -94,7 +94,7 @@ export class FenEditor {
             position: FEN.empty,
             assetsUrl: this.props.assetsUrl,
             style: {
-                aspectRatio: 0.94,
+                aspectRatio: 0.98,
                 pieces: {file: this.props.piecesFile}
             },
             extensions: [{
