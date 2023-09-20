@@ -22,6 +22,7 @@ export class FenEditor {
             assetsUrl: "./node_modules/cm-chessboard/assets/",
             onChange: undefined,
             cookieName: "cfe-fen",
+            boardClass: "default",
             ...props
         }
         this.state = new Observed({
@@ -95,7 +96,8 @@ export class FenEditor {
             assetsUrl: this.props.assetsUrl,
             style: {
                 aspectRatio: 0.98,
-                pieces: {file: this.props.piecesFile}
+                pieces: {file: this.props.piecesFile},
+                cssClass: this.props.boardClass
             },
             extensions: [{
                 class: PositionEditor, props: {
