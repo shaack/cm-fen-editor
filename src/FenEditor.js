@@ -20,17 +20,17 @@ export class FenEditor {
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             piecesFile: "pieces/standard.svg",
             assetsUrl: "./node_modules/cm-chessboard/assets/",
-            onChange: undefined,
             cookieName: "cfe-fen",
             boardTheme: "default",
-            onPositionChanged: undefined,
+            onFenChange: undefined,
+            onPositionChange: undefined,
             ...props
         }
         this.state = new Observed({
             fen: new Fen(this.props.fen),
             fenIsValid: true
         })
-        this.state.addObserver(() => this.onFenChanged(), ["fen"])
+        this.state.addObserver(() => this.onFenChange(), ["fen"])
         this.elements = {
             chessboardContext: context.querySelector(".chessboard"),
             fenInputOutput: context.querySelector(".fen-input-output"),
@@ -103,12 +103,12 @@ export class FenEditor {
             extensions: [{
                 class: PositionEditor, props: {
                     autoSpecialMoves: false,
-                    onPositionChanged: (event) => {
+                    onPositionChange: (event) => {
                         this.state.fen.position = event.position
                         this.removeNotAllowedCastlings()
                         this.state.fen = this.state.fen
-                        if(this.props.onPositionChanged) {
-                            this.props.onPositionChanged(event)
+                        if(this.props.onPositionChange) {
+                            this.props.onPositionChange(event)
                         }
                     }
                 }
@@ -116,7 +116,7 @@ export class FenEditor {
         })
     }
 
-    onFenChanged() {
+    onFenChange() {
         try {
             new Chess(this.state.fen.toString())
             this.state.fenIsValid = true
@@ -125,16 +125,16 @@ export class FenEditor {
         }
         if (this.state.fenIsValid) {
             this.updateValidState()
-            if (this.props.onChange) {
-                this.props.onChange({
+            if (this.props.onFenChange) {
+                this.props.onFenChange({
                     fen: this.state.fen.toString()
                 })
             }
         } else {
             this.elements.fenInputOutput.classList.add("is-invalid")
             console.warn("invalid fen", this.state.fen.toString())
-            if (this.props.onChange) {
-                this.props.onChange({
+            if (this.props.onFenChange) {
+                this.props.onFenChange({
                     fen: null
                 })
             }

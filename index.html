@@ -113,8 +113,11 @@
 
     new FenEditor(document.querySelector(".cm-fen-editor"), {
         boardTheme: "default",
-        onChange: function (event) {
-            console.log("onChange callback", event)
+        onFenChange: function (event) {
+            console.log("onFenChange", event)
+        },
+        onPositionChange: function (event) {
+            console.log("onPositionChange", event)
         }
     })
 </script>
