@@ -23,6 +23,7 @@ export class FenEditor {
             onChange: undefined,
             cookieName: "cfe-fen",
             boardTheme: "default",
+            onPositionChanged: undefined,
             ...props
         }
         this.state = new Observed({
@@ -106,6 +107,9 @@ export class FenEditor {
                         this.state.fen.position = event.position
                         this.removeNotAllowedCastlings()
                         this.state.fen = this.state.fen
+                        if(this.props.onPositionChanged) {
+                            this.props.onPositionChanged(event)
+                        }
                     }
                 }
             }, {class: Markers}],
