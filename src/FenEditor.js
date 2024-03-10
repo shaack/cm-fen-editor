@@ -111,9 +111,10 @@ export class FenEditor {
                         if (this.props.onPositionChange) {
                             this.props.onPositionChange(event)
                         }
-                    }
+                    },
+                    markers: {addPiece: {...this.props.markers}}
                 }
-            }, {class: Markers, props: {autoMarkers: this.props.markers}}],
+            }, {class: Markers, props: {autoMarkers: {...this.props.markers}}}],
         })
     }
 
