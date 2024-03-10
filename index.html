@@ -110,9 +110,11 @@
 <!-- @formatter:on -->
 <script type="module">
     import {FenEditor} from "./src/FenEditor.js"
+    import {MARKER_TYPE} from "cm-chessboard/src/extensions/markers/Markers.js"
 
     new FenEditor(document.querySelector(".cm-fen-editor"), {
         boardTheme: "default",
+        // markers: MARKER_TYPE.square,
         onFenChange: function (event) {
             console.log("onFenChange", event)
         },

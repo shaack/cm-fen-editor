@@ -5,7 +5,7 @@
  */
 
 import {Chessboard, PIECE} from "cm-chessboard/src/Chessboard.js"
-import {Markers} from "cm-chessboard/src/extensions/markers/Markers.js"
+import {MARKER_TYPE, Markers} from "cm-chessboard/src/extensions/markers/Markers.js"
 import {Chess, FEN} from "cm-chess/src/Chess.js"
 import {Cookie} from "cm-web-modules/src/cookie/Cookie.js"
 import {PositionEditor} from "cm-chessboard-position-editor/src/PositionEditor.js"
@@ -24,6 +24,7 @@ export class FenEditor {
             boardTheme: "default",
             onFenChange: undefined,
             onPositionChange: undefined,
+            markers: MARKER_TYPE.frame,
             ...props
         }
         this.state = new Observed({
@@ -107,12 +108,12 @@ export class FenEditor {
                         this.state.fen.position = event.position
                         this.removeNotAllowedCastlings()
                         this.state.fen = this.state.fen
-                        if(this.props.onPositionChange) {
+                        if (this.props.onPositionChange) {
                             this.props.onPositionChange(event)
                         }
                     }
                 }
-            }, {class: Markers}],
+            }, {class: Markers, props: {autoMarkers: this.props.markers}}],
         })
     }
 
