@@ -20,9 +20,17 @@
         <h1>cm-fen-editor, a chess position editor</h1>
         <div class="cm-fen-editor">
             <div class="form-group row mb-3 g-3">
-                <label for="fenInputOutput" class="col-auto col-form-label d-none d-md-block">FEN</label>
                 <div class="col">
-                    <input type="text" class="form-control fen-input-output" id="fenInputOutput">
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="fenInputOutput" class="col-auto col-form-label d-none d-md-block">FEN</label>
+                        <input type="text" class="form-control fen-input-output" id="fenInputOutput">
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="d-flex align-items-center gap-2">
+                        <label for="chess960Number" class="col-auto col-form-label d-none d-md-block">Chess960</label>
+                        <input type="number" class="form-control input-spinner" id="chess960Number" min="0" max="959">
+                    </div>
                 </div>
                 <div class="col-auto">
                     <label for="positionSetUp" class="visually-hidden">Position setups</label>
