@@ -26,8 +26,8 @@
   "dependencies": {
     "bootstrap-auto-dark-mode": "^1.1.1",
     "bootstrap-input-spinner": "^4.0.4",
-    "chess.mjs": "^2.2.6",
-    "cm-chess": "^3.6.1",
+    "chess.mjs": "^2.3.0",
+    "cm-chess": "^3.6.2",
     "cm-chessboard": "^8.11.5",
     "cm-chessboard-position-editor": "^2.2.3",
     "cm-web-modules": "^2.5.1"
