@@ -6,7 +6,7 @@
 
 import {Chessboard, PIECE} from "cm-chessboard/src/Chessboard.js"
 import {MARKER_TYPE, Markers} from "cm-chessboard/src/extensions/markers/Markers.js"
-import {Chess, FEN} from "cm-chess/src/Chess.js"
+import {Chess, FEN, GAME_VARIANT} from "cm-chess/src/Chess.js"
 import {Cookie} from "cm-web-modules/src/cookie/Cookie.js"
 import {PositionEditor} from "cm-chessboard-position-editor/src/PositionEditor.js"
 import {Observed} from "cm-web-modules/src/observed/Observed.js"
@@ -30,9 +30,10 @@ export class FenEditor {
         }
         this.state = new Observed({
             fen: new Fen(this.props.fen),
-            fenIsValid: true
+            fenIsValid: true,
+            chess960Mode: false
         })
-        this.state.addObserver(() => this.onFenChange(), ["fen"])
+        this.state.addObserver(() => this.onFenChange(), ["fen", "chess960Mode"])
         this.elements = {
             chessboardContext: context.querySelector(".chessboard"),
             fenInputOutput: context.querySelector(".fen-input-output"),
@@ -44,7 +45,8 @@ export class FenEditor {
                 bk: context.querySelector(".checkbox-castle-bk"),
                 bq: context.querySelector(".checkbox-castle-bq")
             },
-            chess960Number: context.querySelector("#chess960Number")
+            chess960Number: context.querySelector("#chess960Number"),
+            chess960Mode: context.querySelector(".chess960-mode")
         }
         this.initChessboard()
         this.setEventListeners(context)
@@ -70,6 +72,12 @@ export class FenEditor {
                     this.state.fen.parse(Chess960.generateStartPosition(id))
                     this.state.makeDirty("fen")
                 }
+            })
+        }
+        if (this.elements.chess960Mode) {
+            this.elements.chess960Mode.addEventListener("change", (e) => {
+                this.state.fen.castlings = ["K", "Q", "k", "q"]
+                this.state.chess960Mode = e.target.checked
             })
         }
     }
@@ -131,7 +139,10 @@ export class FenEditor {
 
     onFenChange() {
         try {
-            new Chess(this.state.fen.toString())
+            new Chess({
+                fen: this.state.fen.toString(),
+                gameVariant: this.state.chess960Mode ? GAME_VARIANT.chess960 : GAME_VARIANT.standard
+            })
             this.state.fenIsValid = true
         } catch (e) {
             this.state.fenIsValid = false
@@ -179,6 +190,14 @@ export class FenEditor {
     }
 
     removeNotAllowedCastlings() {
+        if (this.state.chess960Mode) {
+            this.removeNotAllowedCastlings960()
+        } else {
+            this.removeNotAllowedCastlingsStandard()
+        }
+    }
+
+    removeNotAllowedCastlingsStandard() {
         const notAllowedCastlings = {
             "e1": [PIECE.wk, ["K", "Q"]],
             "h1": [PIECE.wr, ["K"]],
@@ -194,5 +213,30 @@ export class FenEditor {
                 })
             }
         }
+    }
+
+    removeNotAllowedCastlings960() {
+        const files = ["a", "b", "c", "d", "e", "f", "g", "h"]
+        const checkRank = (rank, kingPiece, rookPiece, kingSide, queenSide) => {
+            let kingFile = -1
+            let hasRookLeft = false
+            let hasRookRight = false
+            for (let i = 0; i < 8; i++) {
+                const piece = this.chessboard.getPiece(files[i] + rank)
+                if (piece === kingPiece) kingFile = i
+                if (piece === rookPiece) {
+                    if (kingFile === -1) hasRookLeft = true
+                    else hasRookRight = true
+                }
+            }
+            if (kingFile === -1 || !hasRookRight) {
+                this.state.fen.castlings = this.state.fen.castlings.filter((c) => c !== kingSide)
+            }
+            if (kingFile === -1 || !hasRookLeft) {
+                this.state.fen.castlings = this.state.fen.castlings.filter((c) => c !== queenSide)
+            }
+        }
+        checkRank("1", PIECE.wk, PIECE.wr, "K", "Q")
+        checkRank("8", PIECE.bk, PIECE.br, "k", "q")
     }
 }
