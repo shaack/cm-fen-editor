@@ -1,6 +1,6 @@
 {
   "name": "cm-fen-editor",
-  "version": "3.2.10",
+  "version": "4.0.0",
   "description": "A FEN editor for web – uses Bootstrap 4 and cm-chessboard",
   "main": "index.js",
   "type": "module",
