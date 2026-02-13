@@ -54,13 +54,13 @@ export class FenEditor {
     setEventListeners(context) {
         const setStateFromInput = (e) => {
             this.state.fen.parse(e.target.value)
-            this.state.fen = this.state.fen
+            this.state.makeDirty("fen")
         }
         this.elements.fenInputOutput.addEventListener("change", setStateFromInput)
         this.elements.fenSelect.addEventListener("change", setStateFromInput)
         this.elements.colorToPlay.addEventListener("change", (e) => {
             this.state.fen.colorToPlay = e.target.value
-            this.state.fen = this.state.fen
+            this.state.makeDirty("fen")
         })
         DomUtils.delegate(context, "change", ".checkbox-castle", this.setCastleState)
         if (this.elements.chess960Number) {
@@ -68,7 +68,7 @@ export class FenEditor {
                 const id = parseInt(e.target.value)
                 if (!isNaN(id) && id >= 0 && id <= 959) {
                     this.state.fen.parse(Chess960.generateStartPosition(id))
-                    this.state.fen = this.state.fen
+                    this.state.makeDirty("fen")
                 }
             })
         }
@@ -89,7 +89,7 @@ export class FenEditor {
             this.state.fen.castlings.push("q")
         }
         this.removeNotAllowedCastlings()
-        this.state.fen = this.state.fen
+        this.state.makeDirty("fen")
     }
 
     setFenFromUrlOrCookie() {
@@ -100,7 +100,7 @@ export class FenEditor {
         } else if (this.props.cookieName && fenFromCookie) {
             this.state.fen.parse(fenFromCookie)
         }
-        this.state.fen = this.state.fen
+        this.state.makeDirty("fen")
     }
 
     initChessboard() {
@@ -118,7 +118,7 @@ export class FenEditor {
                     onPositionChange: (event) => {
                         this.state.fen.position = event.position
                         this.removeNotAllowedCastlings()
-                        this.state.fen = this.state.fen
+                        this.state.makeDirty("fen")
                         if (this.props.onPositionChange) {
                             this.props.onPositionChange(event)
                         }
