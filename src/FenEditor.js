@@ -12,6 +12,7 @@ import {PositionEditor} from "cm-chessboard-position-editor/src/PositionEditor.j
 import {Observed} from "cm-web-modules/src/observed/Observed.js"
 import {Fen} from "cm-chess/src/Fen.js"
 import {DomUtils} from "cm-web-modules/src/utils/DomUtils.js"
+import {Chess960} from "chess.mjs/src/Chess960.js"
 
 // noinspection SillyAssignmentJS
 export class FenEditor {
@@ -42,7 +43,8 @@ export class FenEditor {
                 wq: context.querySelector(".checkbox-castle-wq"),
                 bk: context.querySelector(".checkbox-castle-bk"),
                 bq: context.querySelector(".checkbox-castle-bq")
-            }
+            },
+            chess960Number: context.querySelector("#chess960Number")
         }
         this.initChessboard()
         this.setEventListeners(context)
@@ -61,6 +63,15 @@ export class FenEditor {
             this.state.fen = this.state.fen
         })
         DomUtils.delegate(context, "change", ".checkbox-castle", this.setCastleState)
+        if (this.elements.chess960Number) {
+            this.elements.chess960Number.addEventListener("change", (e) => {
+                const id = parseInt(e.target.value)
+                if (!isNaN(id) && id >= 0 && id <= 959) {
+                    this.state.fen.parse(Chess960.generateStartPosition(id))
+                    this.state.fen = this.state.fen
+                }
+            })
+        }
     }
 
     setCastleState = () => {
@@ -156,6 +167,13 @@ export class FenEditor {
             this.elements.castling.wq.checked = this.state.fen.castlings.includes("Q")
             this.elements.castling.bk.checked = this.state.fen.castlings.includes("k")
             this.elements.castling.bq.checked = this.state.fen.castlings.includes("q")
+            if (this.elements.chess960Number) {
+                try {
+                    this.elements.chess960Number.value = Chess960.detectStartPosition(fenString)
+                } catch (e) {
+                    this.elements.chess960Number.value = ""
+                }
+            }
             Cookie.write(this.props.cookieName, fenString)
         })
     }
