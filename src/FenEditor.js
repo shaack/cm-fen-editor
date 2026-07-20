@@ -9,6 +9,7 @@ import {MARKER_TYPE, Markers} from "cm-chessboard/src/extensions/markers/Markers
 import {Chess, FEN, GAME_VARIANT} from "cm-chess/src/Chess.js"
 import {Cookie} from "cm-web-modules/src/cookie/Cookie.js"
 import {PositionEditor} from "cm-chessboard-position-editor/src/PositionEditor.js"
+import {RightClickAnnotator} from "cm-chessboard/src/extensions/right-click-annotator/RightClickAnnotator.js"
 import {Observed} from "cm-web-modules/src/observed/Observed.js"
 import {Fen} from "cm-chess/src/Fen.js"
 import {DomUtils} from "cm-web-modules/src/utils/DomUtils.js"
@@ -26,6 +27,7 @@ export class FenEditor {
             onFenChange: undefined,
             onPositionChange: undefined,
             markers: MARKER_TYPE.frame,
+            annotations: false, // right-click markers and arrows (RightClickAnnotator)
             ...props
         }
         this.state = new Observed({
@@ -112,6 +114,25 @@ export class FenEditor {
     }
 
     initChessboard() {
+        const extensions = [{
+            class: PositionEditor, props: {
+                autoSpecialMoves: false,
+                onPositionChange: (event) => {
+                    this.state.fen.position = event.position
+                    this.removeNotAllowedCastlings()
+                    this.state.makeDirty("fen")
+                    if (this.props.onPositionChange) {
+                        this.props.onPositionChange(event)
+                    }
+                },
+                markers: {addPiece: {...this.props.markers}}
+            }
+        }, {class: Markers, props: {autoMarkers: {...this.props.markers}}}]
+        if (this.props.annotations) {
+            // draw markers and arrows with right-click (+ Alt/Shift for colors);
+            // read/write them via chessboard.getAnnotations()/setAnnotations()
+            extensions.push({class: RightClickAnnotator})
+        }
         this.chessboard = new Chessboard(this.elements.chessboardContext, {
             position: FEN.empty,
             assetsUrl: this.props.assetsUrl,
@@ -120,20 +141,7 @@ export class FenEditor {
                 pieces: {file: this.props.piecesFile},
                 cssClass: this.props.boardTheme
             },
-            extensions: [{
-                class: PositionEditor, props: {
-                    autoSpecialMoves: false,
-                    onPositionChange: (event) => {
-                        this.state.fen.position = event.position
-                        this.removeNotAllowedCastlings()
-                        this.state.makeDirty("fen")
-                        if (this.props.onPositionChange) {
-                            this.props.onPositionChange(event)
-                        }
-                    },
-                    markers: {addPiece: {...this.props.markers}}
-                }
-            }, {class: Markers, props: {autoMarkers: {...this.props.markers}}}],
+            extensions: extensions,
         })
     }
 
