@@ -138,6 +138,7 @@ export class FenEditor {
             assetsUrl: this.props.assetsUrl,
             style: {
                 aspectRatio: 0.98,
+                borderType: this.props.borderType,
                 pieces: {file: this.props.piecesFile},
                 cssClass: this.props.boardTheme
             },
