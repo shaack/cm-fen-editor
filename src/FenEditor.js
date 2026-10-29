@@ -57,8 +57,9 @@ export class FenEditor {
 
     setEventListeners(context) {
         const setStateFromInput = (e) => {
-            this.state.fen.parse(e.target.value)
-            this.state.makeDirty("fen")
+            if (this.parseFen(e.target.value)) {
+                this.state.makeDirty("fen")
+            }
         }
         this.elements.fenInputOutput.addEventListener("change", setStateFromInput)
         this.elements.fenSelect.addEventListener("change", setStateFromInput)
@@ -106,11 +107,36 @@ export class FenEditor {
         const fenFromCookie = Cookie.read(this.props.cookieName)
         const fenFromURL = new URLSearchParams(window.location.search).get("fen")
         if (fenFromURL) {
-            this.state.fen.parse(fenFromURL)
+            this.parseFen(fenFromURL)
         } else if (this.props.cookieName && fenFromCookie) {
-            this.state.fen.parse(fenFromCookie)
+            this.parseFen(fenFromCookie)
         }
         this.state.makeDirty("fen")
+    }
+
+    /**
+     * Takes a FEN string from the input field, URL or cookie. If it can't be
+     * parsed (typo, pasted URL), the position stays unchanged and the field is
+     * marked invalid instead of parse() throwing an uncaught error.
+     * @param {string} fenString
+     * @returns {boolean} true if the string was applied
+     */
+    parseFen(fenString) {
+        try {
+            new Fen(fenString)
+        } catch (e) {
+            this.state.fenIsValid = false
+            this.elements.fenInputOutput.classList.add("is-invalid")
+            console.warn("invalid fen", fenString)
+            if (this.props.onFenChange) {
+                this.props.onFenChange({
+                    fen: null
+                })
+            }
+            return false
+        }
+        this.state.fen.parse(fenString)
+        return true
     }
 
     initChessboard() {
